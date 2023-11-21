@@ -19,22 +19,19 @@ import mongoose from "mongoose";
 const currentDate = new Date();
 const curr_date= currentDate.toLocaleTimeString();
 
-type Message ={
+type MainFolder ={
 
-    description:string;
-    File_Location:String;
-
+    folderName:string;
     BannerKey:String,
     Banner_Location:String,
     createdAt: String;
     updatedAt: String;
   }
 
-const messageSchema = new mongoose.Schema({
+const MainFolderSchema = new mongoose.Schema({
 
-  description: String,
-
-    // Banner:String,
+  folderName: String,
+    Banner:String,
     BannerKey:String,
     Banner_Location:String,
     
@@ -46,11 +43,6 @@ const messageSchema = new mongoose.Schema({
         type: String,
       },
     });
-    messageSchema.pre("save", function (this: Message & mongoose.Document, next) {
-      this.updatedAt = new Date() + curr_date;
-      next();
-    });
 
-
-const Message = mongoose.model("message",messageSchema)
+const Message = mongoose.model("mainfolder",MainFolderSchema)
 export default Message;
