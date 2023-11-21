@@ -1,0 +1,29 @@
+name: CICD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
+      - name: Build docker image
+        run: docker build -t deekshithreddy97/final-25days .
+      - name: Publish image to docker hub
+        run: docker push deekshithreddy97/final-25days:latest
+        
+  deploy:
+    needs: build
+    runs-on: [aws-ec2]
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull deekshithreddy97/final-25days:latest
+      - name: Delete old container
+        run: docker rm -f final-25days-container
+      - name: Run docker container
+        run: docker run -d -p 8080:8080 --name final-25days-container deekshithreddy97/final-25days
