@@ -42,7 +42,7 @@ export const createAlbum = async (req, res) => {
 // Create a new article with the uploaded banner details  
     const ArticleDetails = await Album.create({
       AlbumName,
-      albumkey: params.Key,
+      albumkey: Bannerkey,
       album_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
     });
  // Respond with the created article details   
@@ -69,9 +69,10 @@ export const createAlbum = async (req, res) => {
 
   export const getAlbumByName = async (req, res) => {
     // Extract the name parameter from the request
-    const { name } = req.params;
+    const { AlbumName } = req.params;
+    console.log(AlbumName)
     // Convert the name to lowercase for a case-insensitive search
-    const lowercaseTitle = name.toLowerCase();
+    const lowercaseTitle = AlbumName.toLowerCase();
   
     try {
       const ArticleDetails = await Album.find({ AlbumName: lowercaseTitle });
@@ -105,6 +106,7 @@ export const createAlbum = async (req, res) => {
       res.status(500).json({ error: "Error retrieving audio details" });
     }
   };
+
   export const UpdateAlbumTitle = async (req, res) => {
     // Destructure relevant fields from the request body
     const { AlbumName } = req.body;
@@ -152,11 +154,10 @@ export const createAlbum = async (req, res) => {
     try {
       // Fetch the details of the song before deletion
       const deletedAlbum = await Album.findById(id);
-      console.log(deletedAlbum);
+      // console.log(deletedAlbum);
       if (!deletedAlbum) {
-        return res.status(404).json({ error: "Song not found" });
+        return res.status(404).json({ error: "Album not found" });
       }
-  
       // Delete the associated files from S3
       // await deleteS3File(deletedSong.MusicKey);
       await deleteS3File(deletedAlbum.albumkey);
