@@ -44,5 +44,5 @@ const MainFolderSchema = new mongoose.Schema({
       },
     });
 
-const Message = mongoose.model("mainfolder",MainFolderSchema)
-export default Message;
+const FirstFolder = mongoose.model("mainfolder",MainFolderSchema)
+export default FirstFolder;
