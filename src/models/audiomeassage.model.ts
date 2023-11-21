@@ -21,19 +21,24 @@ const curr_date= currentDate.toLocaleTimeString();
 
 type MainFolder ={
 
-    folderName:string;
+  folderName:string;
+  description:String;
     BannerKey:String,
-    Banner_Location:String,
+    Banner_location:String,
     createdAt: String;
     updatedAt: String;
   }
 
 const MainFolderSchema = new mongoose.Schema({
 
-  folderName: String,
+  folderName: {
+    type: String,
+    unique:true,
+  },
+  description:String,
     Banner:String,
     BannerKey:String,
-    Banner_Location:String,
+    Banner_location:String,
     
     createdAt: {
         type: String,
