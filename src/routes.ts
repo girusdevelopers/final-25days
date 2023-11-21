@@ -8,6 +8,8 @@ import MessageRoutes from "@routes/message.route"
 import articleRoutes from "@routes/article.route"
 import SearchRoute from "@routes/search.route"
 import audioMessageRoute from "@routes/audiomessage.route"
+import AlbumRoute from "@routes/album.route"
+
 
 
 const routes = [
@@ -51,6 +53,11 @@ const routes = [
   {
     path: '/audiomessage',
     func: audioMessageRoute,
+  },
+  {
+    path: '/album',
+    func: AlbumRoute,
+
   },
 ];
 

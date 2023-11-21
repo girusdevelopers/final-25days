@@ -2,7 +2,7 @@
 import mongoose from 'mongoose';
 
 const albumSchema = new mongoose.Schema({
-  title: {
+  AlbumName: {
     type: String,
     required: true,
   },

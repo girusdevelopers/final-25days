@@ -14,7 +14,7 @@ export const bannerupload = async (req, res) => {
   const BannerName = sanitizeFileName(file2Name);
   
   const Bannerkey = `${uuidv4()}-${BannerName}`
-  console.log(Bannerkey)
+  // console.log(Bannerkey)
 
   try {
    // Prepare S3 upload parameters for the banner file 

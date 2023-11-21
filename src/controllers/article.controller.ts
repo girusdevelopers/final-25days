@@ -41,7 +41,7 @@ export const createArticle = async (req: Request, res: Response) => {
     const ArticleDetails = await Article.create({
       ArticleTitle,
       content,
-      BannerKey: params.Key,
+      BannerKey: Bannerkey,
       Banner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
     });
  // Respond with the created article details   

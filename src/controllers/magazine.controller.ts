@@ -60,8 +60,8 @@ export const uploadMagazine = async (req, res) => {
     const audio = await Magazine.create({
       MagazineTitle,
       description,
-      pdfKey: params1.Key,
-      BannerKey: params2.Key,
+      pdfKey: pdfKey,
+      BannerKey: Bannerpdfkey,
       pdf: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params1.Key}`,
       Banner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params2.Key}`,
     });
