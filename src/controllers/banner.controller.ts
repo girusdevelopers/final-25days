@@ -59,9 +59,10 @@ export const allbanners = async (req, res) => {
     res.status(400).json("not found");
   }
 };
-export function Banner(arg0: string, deletebanner: any) {
-    throw new Error('Function not implemented.');
-}
+
+// export function Banner(arg0: string, deletebanner: any) {
+//     throw new Error('Function not implemented.');
+// }
 
 export const deletebanner = async (req, res) => {
   const { id } = req.params;
