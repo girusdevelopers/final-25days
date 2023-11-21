@@ -34,7 +34,7 @@ export const bannerupload = async (req, res) => {
     // console.log(params);
 // Create a new banner entry in the database with the uploaded banner file location
     const banner = await Banner.create({
-      bannerKey:params.Key,
+      bannerKey:Bannerkey,
       Banner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
     });
 // Respond with a success status and the created banner details
@@ -59,9 +59,10 @@ export const allbanners = async (req, res) => {
     res.status(400).json("not found");
   }
 };
-export function Banner(arg0: string, deletebanner: any) {
-    throw new Error('Function not implemented.');
-}
+
+// export function Banner(arg0: string, deletebanner: any) {
+//     throw new Error('Function not implemented.');
+// }
 
 export const deletebanner = async (req, res) => {
   const { id } = req.params;

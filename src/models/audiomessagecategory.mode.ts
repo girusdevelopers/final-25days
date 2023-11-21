@@ -20,11 +20,12 @@ const SubFolderSchema = new mongoose.Schema({
     Banner_Location:String,
     
     createdAt: {
-        type: String,
-       default:new Date()+ curr_date,
+      type: Date,
+      default: Date.now,
       },
       updatedAt: {
-        type: String,
+        type: Date,
+    default: Date.now,
       },
     });
 
