@@ -7,6 +7,7 @@ import bannerRoutes from "@routes/banner.route"
 import MessageRoutes from "@routes/message.route"
 import articleRoutes from "@routes/article.route"
 import SearchRoute from "@routes/search.route"
+import AlbumRoute from "@routes/album.route"
 
 
 const routes = [
@@ -46,6 +47,10 @@ const routes = [
   {
     path: '/',
     func: SearchRoute,
+  },
+  {
+    path: '/album',
+    func: AlbumRoute,
   },
 ];
 
