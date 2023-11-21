@@ -13,13 +13,13 @@ export const createMessage = async (req: Request, res: Response) => {
     const { MessageTitle, description,YouTube_Url} = req.body;
     const Banner = req.file;
   
-    // console.log(Banner)
+    console.log(Banner)
     const file2Name = Banner.originalname;//// Extract original file name and sanitize it
-    // console.log(file2Name)
+    console.log(file2Name)
     const BannerName = sanitizeFileName(file2Name);
     
     const Bannerkey = `${uuidv4()}-${BannerName}`
-    // console.log(Bannerkey)
+    console.log(Bannerkey)
     // Upload the image to S3 bucket
     try {
     const params = {
@@ -46,9 +46,6 @@ export const createMessage = async (req: Request, res: Response) => {
       res.status(500).json({ error: "Failed to create the article" });
     }
   };
-  
-
-
 
 
 // Get all messages
@@ -79,21 +76,6 @@ export const UpdateMessage = async(req,res) => {
         res.status(500).json("error")
     }
 }
-//Find messages by title
-export const findbytitle =async (req,res) => {
-    try{
-      // Destructure data from the request parameters
-        const {title}=req.params;
-        console.log(title)
-        // Find messages with the specified title
-        const message =await Message.find({title});
-        // Respond with the retrieved messages
-        res.status(200).json(message);
-    }catch(error){
-       // Handle errors during message retrieval by title
-        res.status(500).json("error")
-    }
-}
 
 
 // Delete a message by its ID
@@ -103,7 +85,7 @@ export const deleteMessageById = async (req, res) => {
   try {
     // Fetch the details of the song before deletion
     const deletedMessage = await Message.findById(id);
-    console.log(deletedMessage);
+    // console.log(deletedMessage);
     if (!deletedMessage) {
       return res.status(404).json({ error: "Song not found" });
     }
@@ -171,4 +153,3 @@ export const getMessageByName = async (req, res) => {
     }
   };
   
-
