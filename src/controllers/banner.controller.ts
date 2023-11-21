@@ -14,7 +14,7 @@ export const bannerupload = async (req, res) => {
   const BannerName = sanitizeFileName(file2Name);
   
   const Bannerkey = `${uuidv4()}-${BannerName}`
-  console.log(Bannerkey)
+  // console.log(Bannerkey)
 
   try {
    // Prepare S3 upload parameters for the banner file 
@@ -34,7 +34,7 @@ export const bannerupload = async (req, res) => {
     // console.log(params);
 // Create a new banner entry in the database with the uploaded banner file location
     const banner = await Banner.create({
-      bannerKey:params.Key,
+      bannerKey:Bannerkey,
       Banner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
     });
 // Respond with a success status and the created banner details
