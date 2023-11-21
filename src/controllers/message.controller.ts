@@ -34,7 +34,7 @@ export const createMessage = async (req: Request, res: Response) => {
     // Create a new message in the database with the uploaded banner key
       const MessageDetails = await Message.create({
         MessageTitle,
-        BannerKey: params.Key,
+        BannerKey: Bannerkey,
         description,
         YouTube_Url,
         Banner_Location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`
