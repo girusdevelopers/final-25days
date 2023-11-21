@@ -4,6 +4,7 @@ import { AWS_BUCKET_NAME, AWS_REGION } from "@/config";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 import { sanitizeFileName } from "@/utils/SanitizeFileName";
+import Album from "@/models/album.model";
 
 /**
  * Interface for specifying optional fields for updating audio details.
@@ -22,7 +23,7 @@ interface UpdateFields {
  */
 export const uploadMusicFiles = async (req, res) => {
   // Extract relevant data from the request body
-  const { Musictitle, artist, lyrics } = req.body;
+  const { Musictitle, artist, lyrics, AlbumName} = req.body;
 
   // Extract music and banner files from the request
   const Music = req.files.Music[0];
@@ -37,6 +38,14 @@ export const uploadMusicFiles = async (req, res) => {
   const file2Name = req.files.Banner[0].originalname;
   const BannerName = sanitizeFileName(file2Name);
   const Bannerkey = `${uuidv4()}-${BannerName}`
+
+  const existingAlbum = await Album.findOne({
+    AlbumName: { $regex: new RegExp(`^${AlbumName}$`, 'i') },
+  });
+
+  if (!existingAlbum) {
+    return res.status(404).json({ error: "Album not found" });
+  }
 
   try {
     // Set up parameters for uploading music file to S3
@@ -72,9 +81,10 @@ export const uploadMusicFiles = async (req, res) => {
     const audio = await Audio.create({
       Musictitle,
       artist,
+      AlbumName,
       lyrics: formattedLyrics,
-      MusicKey: params1.Key,
-      BannerKey: params2.Key,
+      MusicKey: MusicKey,
+      BannerKey: Bannerkey,
       Audio_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params1.Key}`,
       Banner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params2.Key}`,
       download_file: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params1.Key}`,
