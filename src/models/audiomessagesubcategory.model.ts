@@ -3,24 +3,17 @@ import mongoose from "mongoose";
 const currentDate = new Date();
 const curr_date= currentDate.toLocaleTimeString();
 
-type audioFiles ={
-
-    Banner:String,
-    description:String,
-    BannerKey:String,
-    Banner_Location:String,
-    createdAt: String;
-    updatedAt: String;
-  }
+  
+  
 
 const audioFilesSchema = new mongoose.Schema({
 
-  audio: String,
-    Banner:String,
     description:String,
-    BannerKey:String,
-    Banner_Location:String,
-    
+
+    MusicKey:String,
+  BannerKey:String,
+  Audio_location:String,
+  Banner_location:String,    
     createdAt: {
       type: Date,
       default: Date.now,

@@ -9,8 +9,9 @@ import articleRoutes from "@routes/article.route"
 import SearchRoute from "@routes/search.route"
 import audioMessageRoute from "@routes/audiomessage.route"
 import AlbumRoute from "@routes/album.route"
-
-
+import audioMessageCategoryRoute from "@routes/audiomessagecategory.route"
+import audioMessageCategorySubRoute from "@routes/audiomessagesubcategory.route"
+import videoRoutes from "@routes/video.route"
 
 const routes = [
   {
@@ -26,10 +27,10 @@ const routes = [
   //   func: userRoutes,
   // },
 
-  {
-    path: '/admin',
-    func: adminRoutes,
-  },
+  // {
+  //   path: '/admin',
+  //   func: adminRoutes,
+  // },
   {
     path: '/magazine',
     func: S3Routes,
@@ -50,15 +51,24 @@ const routes = [
     path: '/',
     func: SearchRoute,
   },
-  {
-    path: '/audiomessage',
-    func: audioMessageRoute,
-  },
+
   {
     path: '/album',
     func: AlbumRoute,
-
   },
+  {
+    path: '/audiomessagecategory',
+    func: audioMessageCategoryRoute,
+  },
+  {
+    path: '/audiomessagesubcategory',
+    func: audioMessageCategorySubRoute,
+  },
+  {
+    path: '/video',
+    func: videoRoutes,
+  },
+
 ];
 
 export default routes;

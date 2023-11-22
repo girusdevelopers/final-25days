@@ -42,7 +42,7 @@ export const uploade = async (req,res) =>{
     const banner = await FirstFolder.create({
       folderName : folderName ,
       description : description,
-      BannerKey:params.Key,
+      BannerKey:Bannerkey,
       Banner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
     });
 // Respond with a success status and the created banner details
