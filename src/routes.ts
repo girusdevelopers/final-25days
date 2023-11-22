@@ -48,7 +48,7 @@ const routes = [
     func: articleRoutes,
   },
   {
-    path: '/',
+    path: '/search',
     func: SearchRoute,
   },
 

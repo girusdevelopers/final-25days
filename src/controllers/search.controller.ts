@@ -6,16 +6,18 @@ import Magazine from '@/models/magazine.model'
 
 // Define a function for searching across different schemas
  export const search =async (req, res) => {
-        const name = req.params.q.toLowerCase();//Extract the search query from the request parameters
-      
+        const {name} = req.params;//Extract the search query from the request parameters
+        const lowercaseTitle = name.toLowerCase();
+        // console.log(lowercaseTitle)
         try {
           // Search across all schemas
           //Serach for articles with a case-insensitivites partial match on the magazine title
-          const articles = await Article.find({ magazineTitle: { $regex: name, $options: 'i' } });
+          const articles = await Article.find({ ArticleTitle: { $regex: new RegExp(lowercaseTitle, "i") } });
+          // console.log(articles)
           // Search for magazines using full-text search on an unspecified fiels (replace 'query' with an appropriate field name)
-          const messages = await Message.find({ $text: { $search: query } });
-          const magazines = await Magazine.find({ $text: { $search: query } });
-          const songs = await Audio.find({ $text: { $search: query } });
+          const messages = await Message.find({ MessageTitle: { $regex: new RegExp(lowercaseTitle, "i") } });
+          const magazines = await Magazine.find({ MagazineTitle: { $regex: new RegExp(lowercaseTitle, "i") } });
+          const songs = await Audio.find({ Musictitle: { $regex: new RegExp(lowercaseTitle, "i") } });
       
           // Combine and send the results
           const results = { articles, messages, magazines, songs };
