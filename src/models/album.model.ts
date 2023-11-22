@@ -1,6 +1,6 @@
 // models/Album.js
 import mongoose from 'mongoose';
-
+const currentDate = new Date();
 const albumSchema = new mongoose.Schema({
   AlbumName: {
     type: String,
@@ -13,6 +13,10 @@ const albumSchema = new mongoose.Schema({
   album_banner: {
     type: String,
     required: true,
+  },
+  createdAt: {
+    type: Date,
+   default: currentDate,
   },
 });
 

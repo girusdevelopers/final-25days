@@ -10,7 +10,7 @@ type Magazine ={
   BannerKey:String;
   pdf:String
   Banner_location:String;
-  createdAt: String;
+  createdAt: Date;
   updatedAt: String;
 }
 
@@ -23,8 +23,8 @@ const magazine = new mongoose.Schema<Magazine>({
   pdf:String,
   Banner_location:String,
   createdAt: {
-    type: String,
-   default: curr_date,
+    type: Date,
+   default: currentDate,
   },
   updatedAt: {
     type: String,

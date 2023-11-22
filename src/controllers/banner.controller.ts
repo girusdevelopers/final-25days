@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 export const bannerupload = async (req, res) => {
    const file = req.file;
    const file2Name = file.originalname;
-    console.log(file2Name)
+    // console.log(file2Name)
   const BannerName = sanitizeFileName(file2Name);
   
   const Bannerkey = `${uuidv4()}-${BannerName}`

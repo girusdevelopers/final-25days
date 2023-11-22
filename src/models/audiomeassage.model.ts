@@ -17,17 +17,7 @@
 
 import mongoose from "mongoose";
 const currentDate = new Date();
-const curr_date= currentDate.toLocaleTimeString();
 
-type MainFolder ={
-
-  folderName:string;
-  description:String;
-    BannerKey:String,
-    Banner_location:String,
-    createdAt: String;
-    updatedAt: String;
-  }
 
 const MainFolderSchema = new mongoose.Schema({
 
@@ -42,11 +32,11 @@ const MainFolderSchema = new mongoose.Schema({
     
     createdAt: {
       type: Date,
-      default: Date.now,
-      },
+     default: currentDate,
+    },
       updatedAt: {
         type: Date,
-    default: Date.now,
+       default: Date.now,
       },
     });
 

@@ -4,6 +4,8 @@ import mongoose, { model, Schema } from "mongoose";
 // const crypto = require("crypto");
 // const bcrypt = require("bcrypt");
 
+const currentDate = new Date();
+
 const adminSchema =  new mongoose.Schema({
 
   email: 
@@ -24,7 +26,7 @@ const adminSchema =  new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now,
+   default: currentDate,
   },
   role: {
     type: String,

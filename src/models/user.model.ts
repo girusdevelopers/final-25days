@@ -3,7 +3,7 @@ import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-
+const currentDate = new Date();
 
   
 type UserDocument = {
@@ -11,8 +11,7 @@ type UserDocument = {
     phone: String;
     email:String;
     password:String;
-    role:String
-
+    role:String,
   forgetPasswordToken: string;
   forgetPasswordExpiry: Date;
   createdAt: Date;
@@ -72,7 +71,7 @@ type UserDocument = {
       },
       createdAt: {
         type: Date,
-        default: Date.now,
+       default: currentDate,
       },
       updatedAt: {
         type: Date,

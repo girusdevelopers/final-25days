@@ -9,7 +9,7 @@ type Message ={
     YouTube_Url:String;
     BannerKey:String,
     Banner_Location:String,
-    createdAt: String;
+    createdAt: Date;
     updatedAt: String;
   }
 
@@ -23,9 +23,9 @@ const messageSchema = new mongoose.Schema({
     Banner_Location:String,
     
     createdAt: {
-        type: String,
-       default:new Date()+ curr_date,
-      },
+      type: Date,
+     default: currentDate,
+    },
       updatedAt: {
         type: String,
       },

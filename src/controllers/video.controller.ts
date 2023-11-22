@@ -14,13 +14,13 @@ export const createVideo = async (req: Request, res: Response) => {
     const { VideoTitle, description,YouTube_Url} = req.body;
     const Banner = req.file;
   
-    console.log(Banner)
+    // console.log(Banner)
     const file2Name = Banner.originalname;//// Extract original file name and sanitize it
-    console.log(file2Name)
+    // console.log(file2Name)
     const BannerName = sanitizeFileName(file2Name);
     
     const Bannerkey = `${uuidv4()}-${BannerName}`
-    console.log(Bannerkey)
+    // console.log(Bannerkey)
     // Upload the image to S3 bucket
     try {
     const params = {
