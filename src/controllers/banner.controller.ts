@@ -48,10 +48,10 @@ export const bannerupload = async (req, res) => {
   }
 };
 
-export const allbanners = async (req, res) => {
+export const OfflineAndOnline = async (req, res) => {
   try {
     // Retrieve all banner entries from the database
-    const banners = await Banner.find({});
+    const banners = await Banner.find();
 // Respond with a success status and the retrieved banners
     res.status(200).json(banners);
   } catch (error) {
@@ -60,6 +60,27 @@ export const allbanners = async (req, res) => {
   }
 };
 
+export const allbanners = async (req, res) => {
+  try {
+    // Retrieve all banner entries from the database
+    const banners = await Banner.find({ status: 'Online' });
+// Respond with a success status and the retrieved banners
+    res.status(200).json(banners);
+  } catch (error) {
+    // Handle errors during banner retrieval
+    res.status(400).json("not found");
+  }
+};
+
+export const Offlinebanners =async (req, res) => {
+  try {
+    const offlineBanners = await Banner.find({ status: 'Offline' });
+    res.status(200).json({ banners: offlineBanners });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 // export function Banner(arg0: string, deletebanner: any) {
 //     throw new Error('Function not implemented.');
 // }
@@ -93,3 +114,30 @@ export const deletebanner = async (req, res) => {
     return res.status(500).json({ error: "Error deleting audio details" });
   }
 };
+
+
+export const UpdateBannerStatus =async(req,res)=>{
+
+  const {bannerId}=req.params;
+  const { status } = req.body;
+  try {
+  const banner = await Banner.findById(bannerId);
+
+    // Check if the banner exists
+    if (!banner) {
+      return res.status(404).json({ message: 'Banner not found' });
+    }
+
+    // Update the status
+    banner.status = status;
+
+    // Save the updated banner to the database
+    await banner.save();
+
+    res.status(200).json({ message: 'Banner status updated successfully', banner });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+
+}

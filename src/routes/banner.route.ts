@@ -18,6 +18,9 @@ router.post('/bannerupload', upload.single('file'),Banner.bannerupload);
  * @access Public
  */
 router.get('/getall',Banner.allbanners)
+router.get('/offline',Banner.Offlinebanners)
+router.get('/allbanners',Banner.OfflineAndOnline)
 router.delete('/delete/:id',Banner.deletebanner)
+router.put('/updatestatus/:bannerId',Banner.UpdateBannerStatus)
 
 export default router;
