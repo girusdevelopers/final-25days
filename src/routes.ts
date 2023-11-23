@@ -68,6 +68,10 @@ const routes = [
     path: '/video',
     func: videoRoutes,
   },
+  {
+    path: '/audiomessage',
+    func: audioMessageRoute,
+  },
 
 ];
 
