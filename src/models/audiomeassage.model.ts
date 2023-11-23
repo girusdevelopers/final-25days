@@ -14,31 +14,27 @@
 // const AudioMessage = mongoose.model('audiomessage', audiomessageSchema); // 'Song' is the model name
 // export default AudioMessage;
 
-
 import mongoose from "mongoose";
 const currentDate = new Date();
 
-
 const MainFolderSchema = new mongoose.Schema({
-
   folderName: {
     type: String,
-    unique:true,
   },
-  description:String,
-    Banner:String,
-    BannerKey:String,
-    Banner_location:String,
-    
-    createdAt: {
-      type: Date,
-     default: currentDate,
-    },
-      updatedAt: {
-        type: Date,
-       default: Date.now,
-      },
-    });
+  description: String,
+  Banner: String,
+  BannerKey: String,
+  Banner_location: String,
 
-const FirstFolder = mongoose.model("mainfolder",MainFolderSchema)
+  createdAt: {
+    type: Date,
+    default: currentDate,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const FirstFolder = mongoose.model("mainfolder", MainFolderSchema);
 export default FirstFolder;

@@ -122,13 +122,11 @@ const curr_date = currentDate.toLocaleTimeString();
 
 const SubFolderSchema = new mongoose.Schema({
   subfolderName: {
-    type: String,
-    unique: true,
-  },
+    type: String  },
+  folderName:String,
   description: String,
   BannerKey: String,
   Banner_location: String,
-  mainFolder: String,
   createdAt: {
     type: Date,
     default: Date.now,

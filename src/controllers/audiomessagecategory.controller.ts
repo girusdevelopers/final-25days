@@ -90,8 +90,6 @@ export const uploads = async (req, res) => {
     // Check if the SecondFolder already exists for the given FirstFolder
     const existingsecondFolder = await SecondFolder.findOne({
         subfolderName: { $regex: new RegExp(`^${subfolderName}$`, 'i') },
-        // mainFolder: existingFirstFolder.folderName,
-
     });
   
     if (existingsecondFolder) {
@@ -116,7 +114,6 @@ export const uploads = async (req, res) => {
         subfolderName,
         description,
         BannerKey: Bannerkey,
-        mainFolder: existingFirstFolder.folderName, // Provide the _id of the existing FirstFolder
         Banner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
       });
   
@@ -126,13 +123,10 @@ export const uploads = async (req, res) => {
         banner,
       });
 
-    } catch (error) {
-      if (error.code === 'NoSuchBucket') {
-          return res.status(500).json({ error: "Bucket does not exist" });
-      } else {
-          console.error("Error:", error);
-          return res.status(500).json({ error: "Internal Server Error" });
-      }
+    } 
+    catch (error) {
+      console.error("Error:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
