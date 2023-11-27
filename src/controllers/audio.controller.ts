@@ -21,7 +21,7 @@ interface UpdateFields {
  * @description Get all users
  * @access Public
  */
-export const uploadMusicFiles = async (req, res) => {
+ export const uploadMusicFiles = async (req, res) => {
   // Extract relevant data from the request body
   const { Musictitle, artist, lyrics, AlbumName} = req.body;
 

@@ -12,6 +12,9 @@ import AlbumRoute from "@routes/album.route"
 import audioMessageCategoryRoute from "@routes/audiomessagecategory.route"
 import audioMessageCategorySubRoute from "@routes/audiomessagesubcategory.route"
 import videoRoutes from "@routes/video.route"
+import MainFolder from "@routes/SubFolderPanchayithe/MainFolder.route"
+import SubFolder from "@routes/SubFolderPanchayithe/SubFolder.route"
+import AudioMesssage from "@routes/SubFolderPanchayithe/AudioMessage.route"
 
 const routes = [
   {
@@ -68,9 +71,21 @@ const routes = [
     path: '/video',
     func: videoRoutes,
   },
+  // {
+  //   path: '/audiomessage',
+  //   func: audioMessageRoute,
+  // },
+  {
+    path: '/mainfolder',
+    func: MainFolder,
+  },
+  {
+    path: '/subfolder',
+    func: SubFolder,
+  },
   {
     path: '/audiomessage',
-    func: audioMessageRoute,
+    func: AudioMesssage,
   },
 
 ];
