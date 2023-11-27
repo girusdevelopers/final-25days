@@ -92,3 +92,90 @@ export const uploadAudioMessage = async (req, res) => {
       return res.status(500).json(error);
     }
   };
+
+
+
+  export const getMainFolderByName = async (req, res) => {
+    // Extract the name parameter from the request
+    try {
+     const { MainFolderName } = req.params;
+       console.log(MainFolderName)
+      // Convert the name to lowercase for a case-insensitive search
+      const lowercaseTitle = MainFolderName.toLowerCase();
+  
+  
+      // const ArticleDetails = await MainFolder.find({ MainFolderName: lowercaseTitle });
+  
+      const ArticleDetailsbyWord = await AudioMesssage.find({
+        MainmostFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
+      });
+      if (ArticleDetailsbyWord.length === 0) {
+            // Check if there are no partial matches
+            return res.status(200).json("not found");
+          } else {
+            // Both exact and partial matches found
+            const results = {
+              ArticleDetailsbyWord,
+            };
+            res.status(200).json({
+              success: "successfully",
+              results,
+            }); 
+          }
+      // Check if there are no exact matches
+    //   if (ArticleDetails.length === 0 && ArticleDetailsbyWord.length === 0) {
+    //     return res.status(404).send("No articles found");
+    //   } else if (ArticleDetails.length === 0) {
+    // // Respond with partial matches if no exact matches are found     
+    //     return res.status(200).json(ArticleDetailsbyWord);
+    //   } else if (ArticleDetailsbyWord.length === 0) {
+    //     // Check if there are no partial matches
+    //     return res.status(200).json(ArticleDetailsbyWord);
+    //   } else {
+    //     // Both exact and partial matches found
+    //     const results = {
+    //       ArticleDetails,
+    //       ArticleDetailsbyWord,
+    //     };
+    //     res.status(200).json({
+    //       success: "successfully",
+    //       results,
+    //     }); 
+    //   }
+        }catch (error) {
+      // Respond with a 500 error and an error message
+      res.status(500).json(error);
+    }
+  };
+
+  export const getsubFolderByName = async (req, res) => {
+    // Extract the name parameter from the request
+    try {
+     const { SubFolderName } = req.params;
+    //    console.log(MainFolderName)
+      // Convert the name to lowercase for a case-insensitive search
+      const lowercaseTitle = SubFolderName.toLowerCase();
+    //   console.log(lowercaseTitle)
+  
+    //   const ArticleDetails = await SubFolder.find({ MainmostFolderName: lowercaseTitle });
+  
+      const ArticleDetailsbyWord = await AudioMesssage.find({
+        SubFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
+      });
+  console.log(ArticleDetailsbyWord)
+    if (ArticleDetailsbyWord.length === 0) {
+            // Check if there are no partial matches
+            return res.status(400).json(`no sub filders by ${SubFolderName} found`);
+    }
+        res.status(200).json({
+          success: "successfully",
+          ArticleDetailsbyWord,
+        }); 
+    } catch (error) {
+      // Respond with a 500 error and an error message
+      res.status(500).json(error);
+    }
+  };
+
+
+
