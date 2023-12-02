@@ -16,6 +16,22 @@ export const uploade = async (req, res) => {
   const Music = req.files.Music[0];
   const Banner = req.files.Banner[0];
 
+  if (!folderName) {
+    return res.status(400).json({ error: "folderName required field" });
+  }
+
+  if (!description) {
+    return res.status(400).json({ error: "description required field" });
+  }
+
+  if (!Music) {
+    return res.status(400).json({ error: "Music required file" });
+  }
+
+  if (!Banner) {
+    return res.status(400).json({ error: "Banner required file" });
+  }
+
   // Process music details
   const AudioName = req.files.Music[0].originalname;
   const MusicName = sanitizeFileName(AudioName);

@@ -14,9 +14,25 @@ export const uploadMagazine = async (req, res) => {
   // Extract relevant data from the request body
   const { MagazineTitle, description } = req.body;
 
+  if (!MagazineTitle) {
+    return res.status(400).json({ error: "MagazineTitle required field" });
+  }
+
+  if (!description) {
+    return res.status(400).json({ error: "description required field" });
+  }
+
   // Extract music and banner files from the request
   const pdf = req.files.pdf[0];
   const Bannerpdf = req.files.Bannerpdf[0];
+
+  if (!pdf) {
+    return res.status(400).json({ error: "pdf required file" });
+  }
+
+  if (!Bannerpdf) {
+    return res.status(400).json({ error: "Bannerpdf required file" });
+  }
 
   // Process music details
   const pdfName = req.files.pdf[0].originalname;

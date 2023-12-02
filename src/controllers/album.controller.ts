@@ -13,6 +13,14 @@ export const createAlbum = async (req, res) => {
   const { AlbumName } = req.body;
   const AblumBanner = req.file;
 
+  if (!AlbumName) {
+    return res.status(400).json({ error: "AlbumName required field" });
+  }
+
+  if (!AblumBanner) {
+    return res.status(400).json({ error: "AblumBanner required file" });
+  }
+
   // console.log(AblumBanner)
   const file2Name = AblumBanner.originalname;
   

@@ -12,6 +12,18 @@ export const uploade = async (req,res) =>{
   console.log("banner:",Banner);
   console.log(folderName);
 
+  if (!folderName) {
+    return res.status(400).json({ error: "folderName required field" });
+  }
+
+  if (!description) {
+    return res.status(400).json({ error: "description required field" });
+  }
+
+  if (!Banner) {
+    return res.status(400).json({ error: "Banner required file" });
+  }
+
   const existingFolder = await FirstFolder.findOne({
     folderName: { $regex: new RegExp(`^${folderName}$`, 'i') },
   });

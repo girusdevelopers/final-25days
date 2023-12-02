@@ -18,6 +18,18 @@ export const createArticle = async (req: Request, res: Response) => {
   const { ArticleTitle, content } = req.body;
   const Banner = req.file;
 
+  if (!ArticleTitle) {
+    return res.status(400).json({ error: "ArticleTitle required field" });
+  }
+
+  if (!content) {
+    return res.status(400).json({ error: "content required field" });
+  }
+
+  if (!Banner) {
+    return res.status(400).json({ error: "Banner required file" });
+  }
+
   // console.log(Banner)
   const file2Name = Banner.originalname;
   // console.log(file2Name)

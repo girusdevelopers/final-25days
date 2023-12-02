@@ -25,15 +25,15 @@ const routes = [
     path: '/audio',
     func: audioRoutes,
   },
-  // {
-  //   path: '/user',
-  //   func: userRoutes,
-  // },
+  {
+    path: '/user',
+    func: userRoutes,
+  },
 
-  // {
-  //   path: '/admin',
-  //   func: adminRoutes,
-  // },
+  {
+    path: '/admin',
+    func: adminRoutes,
+  },
   {
     path: '/magazine',
     func: S3Routes,

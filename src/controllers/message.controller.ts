@@ -12,6 +12,22 @@ export const createMessage = async (req: Request, res: Response) => {
   // Destructure data from the request body
     const { MessageTitle, description,YouTube_Url} = req.body;
     const Banner = req.file;
+
+    if (!MessageTitle) {
+      return res.status(400).json({ error: "MessageTitle required field" });
+    }
+
+    if (!description) {
+      return res.status(400).json({ error: "description required field" });
+    }
+
+    if (!YouTube_Url) {
+      return res.status(400).json({ error: "YouTube_Url required field" });
+    }
+
+    if (!Banner) {
+      return res.status(400).json({ error: "Banner required file" });
+    }
   
     console.log(Banner)
     const file2Name = Banner.originalname;//// Extract original file name and sanitize it

@@ -11,6 +11,14 @@ import { v4 as uuidv4 } from "uuid";
 export const createMainFolder = async (req, res) => {
     const { MainmostFolderName } = req.body;
     const MainFolderBanner = req.file;
+
+    if (!MainmostFolderName) {
+      return res.status(400).json({ error: "MainmostFolderName required field" });
+    }
+
+    if (!MainFolderBanner) {
+      return res.status(400).json({ error: "MainFolderBanner required file" });
+    }
   
     // console.log(AblumBanner)
     const file2Name = MainFolderBanner.originalname;

@@ -25,9 +25,33 @@ interface UpdateFields {
   // Extract relevant data from the request body
   const { Musictitle, artist, lyrics, AlbumName} = req.body;
 
+  if (!Musictitle) {
+    return res.status(400).json({ error: "Musictitle required field" });
+  }
+
+  if (!artist) {
+    return res.status(400).json({ error: "artist required fields" });
+  }
+
+  if (!lyrics) {
+    return res.status(400).json({ error: "lyrics required fields" });
+  }
+
+  if (!AlbumName) {
+    return res.status(400).json({ error: "AlbumName required fields" });
+  }
+
   // Extract music and banner files from the request
   const Music = req.files.Music[0];
   const Banner = req.files.Banner[0];
+
+  if (!Music) {
+    return res.status(400).json({ error: "Music required files" });
+  }
+
+  if (!Banner) {
+    return res.status(400).json({ error: "Banner required files" });
+  }
 
   // Process music details
   const AudioName = req.files.Music[0].originalname;

@@ -11,6 +11,18 @@ import { v4 as uuidv4 } from "uuid";
 export const createSubFolder = async (req, res) => {
     const { SubFolderName,MainmostFolderName } = req.body;
     const SubFolderBanner = req.file;
+
+    if (!SubFolderName) {
+      return res.status(400).json({ error: "SubFolderName required field" });
+    }
+
+    if (!MainmostFolderName) {
+      return res.status(400).json({ error: "MainmostFolderName required field" });
+    }
+
+    if (!SubFolderBanner) {
+      return res.status(400).json({ error: "SubFolderBanner required file" });
+    }
   
     // console.log(AblumBanner)
     const file2Name = SubFolderBanner.originalname;

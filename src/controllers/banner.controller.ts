@@ -9,6 +9,11 @@ import { v4 as uuidv4 } from "uuid";
 
 export const bannerupload = async (req, res) => {
    const file = req.file;
+
+   if (!file) {
+    return res.status(400).json({ error: "file required" });
+  }
+
    const file2Name = file.originalname;
     // console.log(file2Name)
   const BannerName = sanitizeFileName(file2Name);

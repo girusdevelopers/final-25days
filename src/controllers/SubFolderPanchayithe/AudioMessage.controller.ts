@@ -15,6 +15,34 @@ export const uploadAudioMessage = async (req, res) => {
     // Extract music and banner files from the request
     const Music = req.files.Music[0];
     const Banner = req.files.Banner[0];
+
+    if (!AudioMesssagetitle) {
+      return res.status(400).json({ error: "AudioMesssagetitle required field" });
+    }
+
+    if (!artist) {
+      return res.status(400).json({ error: "artist required field" });
+    }
+
+    if (!description) {
+      return res.status(400).json({ error: "description required field" });
+    }
+
+    if (!MainmostFolderName) {
+      return res.status(400).json({ error: "MainmostFolderName required field" });
+    }
+
+    if (!SubFolderName) {
+      return res.status(400).json({ error: "SubFolderName required field" });
+    }
+
+    if (!Music) {
+      return res.status(400).json({ error: "Music required file" });
+    }
+
+    if (!Banner) {
+      return res.status(400).json({ error: "Banner required file" });
+    }
   
     // Process music details
     const AudioName = req.files.Music[0].originalname;

@@ -7,7 +7,8 @@ router.post("/admin/login",  admin.Adminlogin);
 
 router.post("/admin/logout",  admin.AdminlogOut);
 
-router.put("/admin/:email",  admin.edit);
+// router.put("/admin/:email",  admin.updateEmail);
 
+router.put("/admin/update",  admin.updateAdminCredentials);
 
 export default router;

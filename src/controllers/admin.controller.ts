@@ -6,33 +6,34 @@ import secrets from "@/config/secrets";
 import User from "@/models/user.model";
 
  // Extract email and password from the request body
-export const Adminlogin = async (req, res) => {
+ export const Adminlogin = async (req, res) => {
   try {
-  // Extract email and password from the request body   
+    // Extract email and password from the request body
     const { email, password } = req.body;
 
-    // Check if a user with the provided email exists
-    const existingAdmin = await Admin.findOne({ email });
+    // Check if there are any existing admin credentials
+    const existingAdmin = await Admin.findOne();
 
-    if (existingAdmin) {
-      // User with the provided email exists, so this is a login attempt
-      if (password === existingAdmin.password) {
-        return res.status(200).json({ message: "Login successful" });
-      } else {
-        return res.status(401).json({ message: "Incorrect password" });
-      }
-    } else {
-      // User with the provided email doesn't exist, so this is a signup attempt
-      // You should hash the password before saving it in a production environment
-      // For educational purposes, we're storing it as plain text here
+    if (!existingAdmin) {
+      // No existing admin, allow signup
       const newAdmin = new Admin({
         email,
         password, // You should hash the password here in a production environment
       });
-// Save the new admin to the database
+
+      // Save the new admin to the database
       await newAdmin.save();
-// Respond with a success message      
+
+      // Respond with a success message
       return res.status(201).json({ message: "Signup successful" });
+    } else {
+      // Admin credentials exist, check login
+      if (email === existingAdmin.email && password === existingAdmin.password) {
+        return res.status(200).json({ message: "Login successful" });
+      } else {
+        // Check if both email and password are incorrect
+        return res.status(401).json({ message: "Incorrect email or password" });
+      }
     }
   } catch (error) {
     // Handle errors during login/signup
@@ -53,36 +54,41 @@ export const AdminlogOut = async (req, res) => {
   });
   res.status(200).json({
     success: true,
-    message: "Logout User Successfully",
+    message: "Logout Admin Successfully",
   });
 };
 
 
-export const edit = async (req, res) => {
+export const updateAdminCredentials = async (req, res) => {
   try {
-   // Extract email and password from the request parameters and body  
-    const email = req.params.email;
-    const { password } = req.body;
+    // Extract updated email and password from the request body
+    const { _id, newEmail, newPassword } = req.body;
 
-    // Find the user by email
-    const user = await Admin.findOne({ email });
-    console.log(user)
+    // Find the existing admin by ObjectId
+    const existingAdmin = await Admin.findById(_id);
 
-    if (!user) {
-      // Admin not found, respond with a 404 error
-      return res.status(404).json({ error: 'Email not found' });
+    if (!existingAdmin) {
+      return res.status(404).json({ message: "Admin not found" });
     }
 
-    // Update the user's password
-    user.password = password;
+    // Update the existing admin's credentials
+    const updatedAdmin = await Admin.findByIdAndUpdate(
+      _id,
+      { email: newEmail, password: newPassword },
+      { new: true }
+    );
 
-    // Save the updated user to the database
-    await user.save();
-
-    // Respond with a success message
-    res.status(200).json({ message: 'Password updated successfully' });
+    if (updatedAdmin) {
+      return res.status(200).json({ message: "Admin credentials updated successfully" });
+    } else {
+      return res.status(500).json({ message: "Failed to update admin credentials" });
+    }
   } catch (error) {
-    // Handle errors during password update
-    res.status(500).json({ message: 'An error occurred while updating the password' });
+    // Handle errors during admin credentials update
+    console.error("Error occurred during admin credentials update:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while processing your request" });
   }
 };
+

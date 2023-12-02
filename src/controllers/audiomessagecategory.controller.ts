@@ -69,6 +69,22 @@ import FirstFolder from "@/models/audiomeassage.model";
 export const uploads = async (req, res) => {
     const { subfolderName, description, folderName } = req.body;
     const Banner = req.files.Banner[0];
+
+    if (!folderName) {
+      return res.status(400).json({ error: "folderName required field" });
+    }
+
+    if (!subfolderName) {
+      return res.status(400).json({ error: "subfolderName required field" });
+    }
+
+    if (!description) {
+      return res.status(400).json({ error: "description required field" });
+    }
+
+    if (!Banner) {
+      return res.status(400).json({ error: "Banner required file" });
+    }
   
     const file2Name = Banner.originalname;
 
