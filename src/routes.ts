@@ -15,7 +15,7 @@ import videoRoutes from "@routes/video.route"
 import MainFolder from "@routes/SubFolderPanchayithe/MainFolder.route"
 import SubFolder from "@routes/SubFolderPanchayithe/SubFolder.route"
 import AudioMesssage from "@routes/SubFolderPanchayithe/AudioMessage.route"
-
+import contactRoutes from "@routes/contactus.route";
 const routes = [
   {
     path: '/home',
@@ -86,6 +86,10 @@ const routes = [
   {
     path: '/audiomessage',
     func: AudioMesssage,
+  },
+  {
+    path: '/ContactUs',
+    func: contactRoutes,
   },
 
 ];
