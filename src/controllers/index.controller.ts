@@ -7,7 +7,7 @@ export const home = (req: Request, res: Response, next: NextFunction) => {
    // Respond with a 200 status and a JSON message 
     return res.status(200).json({
       success: true,
-      message: 'Hello cicd',
+      message: 'Hello second cicd',
     });
   } catch (error) {
    // If an error occurs, pass it to the error-handling middleware 
