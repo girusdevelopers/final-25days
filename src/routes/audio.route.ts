@@ -35,6 +35,8 @@ router.put('/updateAudio/:id', Music.updateAudioDetails);//update
  * @throws {object} - Returns a 500 error if there is an error retrieving audio details.
  */
 router.get('/getall', Music.getallsongs);//getall
+router.get('/allsongs', Music.allsongs);//getall
+
 
 
 /**

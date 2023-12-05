@@ -18,9 +18,21 @@ import Magazine from '@/models/magazine.model'
           const messages = await Message.find({ MessageTitle: { $regex: new RegExp(lowercaseTitle, "i") } });
           const magazines = await Magazine.find({ MagazineTitle: { $regex: new RegExp(lowercaseTitle, "i") } });
           const songs = await Audio.find({ Musictitle: { $regex: new RegExp(lowercaseTitle, "i") } });
-      
+
+      if(articles.length===0 && messages.length===0 && magazines.length===0 && songs.length===0){
+          return res.status(400).json("No results found")
+      }
+
           // Combine and send the results
           const results = { articles, messages, magazines, songs };
+
+          for (const key in results) {
+            if (results[key].length === 0) {
+              // Remove properties with empty arrays
+              delete results[key];
+            }
+          }
+          // console.log(results)
           //Respond with the combined searchresults
           res.json(results);
         } catch (error) {

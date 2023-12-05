@@ -1,7 +1,7 @@
 // models/Album.js
 import mongoose from 'mongoose';
 const currentDate = new Date();
-const subchema = new mongoose.Schema({
+const Videosubchema = new mongoose.Schema({
     SubFolderName: {
     type: String,
     required: true,
@@ -24,6 +24,6 @@ const subchema = new mongoose.Schema({
   },
 });
 
-const SubFolder = mongoose.model('SubFolder', subchema);
+const VideoSubFolder = mongoose.model('VideoSubFolder', Videosubchema);
 
-export default SubFolder;
+export default VideoSubFolder;

@@ -10,10 +10,10 @@ import {
 const router = express.Router();
 
 // Create a new contact message
-router.post('/contactus', createContactMessage);
+router.post('/createmessage', createContactMessage);
 
 // Get all contact messages
-router.get('/getallcontactus', getAllContactMessages);
+router.get('/getall', getAllContactMessages);
 
 // Update a contact message by ID
 router.put('/:id', updateContactMessage);

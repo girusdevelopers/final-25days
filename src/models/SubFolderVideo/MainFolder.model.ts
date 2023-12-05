@@ -1,7 +1,7 @@
 // models/Album.js
 import mongoose from 'mongoose';
 const currentDate = new Date();
-const Mainmostchema = new mongoose.Schema({
+const VideoMainmostchema = new mongoose.Schema({
     MainmostFolderName: {
     type: String,
     required: true,
@@ -24,6 +24,6 @@ const Mainmostchema = new mongoose.Schema({
   },
 });
 
-const MainFolder = mongoose.model('Mainmost', Mainmostchema);
+const VideoMainFolder = mongoose.model('VideoMainmost', VideoMainmostchema);
 
-export default MainFolder;
+export default VideoMainFolder;

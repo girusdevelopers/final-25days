@@ -223,6 +223,23 @@ export const getallsongs = async (req, res) => {
   }
 };
 
+export const allsongs = async (req, res) => {
+  try {
+   
+
+
+    const getallsongs = await Audio.find()
+      
+    return res.status(200).json({
+      success: "Fetched songs",
+      getallsongs,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Error retrieving audio details." });
+  }
+};
+
+
 /**
  * Delete a song by ID, including associated files from S3 and the database.
  *
@@ -309,27 +326,27 @@ export const getAudioByName = async (req, res) => {
 
   try {
     // Find audio details with an exact match to the lowercase title
-    const audioDetails = await Audio.find({ Musictitle: lowercaseTitle });
+    // const audioDetails = await Audio.find({ Musictitle: lowercaseTitle });
 
     // Find audio details with a case-insensitive partial match to the lowercase title
-    const audioDetailsbyWord = await Audio.find({
+    const audioDetails = await Audio.find({
       Musictitle: { $regex: new RegExp(lowercaseTitle, "i") },
     });
 
     // Check if there are no exact matches
-    if (audioDetails.length === 0) {
-      return res.status(200).json(audioDetailsbyWord);
-    } else if (audioDetailsbyWord.length === 0) {
-      // Check if there are no partial matches
-      return res.status(200).json(audioDetailsbyWord);
-    } else {
+    // if (audioDetails.length === 0) {
+    //   return res.status(200).json(audioDetailsbyWord);
+    // } else if (audioDetailsbyWord.length === 0) {
+    //   // Check if there are no partial matches
+    //   return res.status(200).json(audioDetailsbyWord);
+    // } else {
       // Both exact and partial matches found
       const results = {
+        // audioDetails,
         audioDetails,
-        audioDetailsbyWord,
       };
       res.status(200).json(results);
-    }
+    // }
   } catch (error) {
     // Respond with a 500 error and an error message
     res.status(500).json({ error: "Error retrieving audio details" });

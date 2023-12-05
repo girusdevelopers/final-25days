@@ -5,14 +5,10 @@ const currentDate = new Date();
 
 const VideoSchema = new mongoose.Schema({
   Videotitle:String,
-  artist:String,
   description:String,
   MainmostFolderName:String,
   SubFolderName:String,
-  VideoKey:String,
-  VideoBannerKey:String,
-  Video_location:String,
-  VideoBanner_location:String,
+  YoutubeUrl:String,
   createdAt: {
     type: Date,
    default: currentDate,

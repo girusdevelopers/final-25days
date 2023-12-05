@@ -1,6 +1,8 @@
 import { AWS_BUCKET_NAME, AWS_REGION } from "@/config";
 import MainFolder from "@/models/SubFolderPanchayithe/MainFolder.model";
 import SubFolder from "@/models/SubFolderPanchayithe/SubFolder.model";
+import VideoMainFolder from "@/models/SubFolderVideo/MainFolder.model";
+import VideoSubFolder from "@/models/SubFolderVideo/SubFolder.model";
 import { sanitizeFileName } from "@/utils/SanitizeFileName";
 import { s3client } from "@/utils/s3service";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
@@ -43,12 +45,12 @@ export const createSubFolder = async (req, res) => {
     const command1 = new PutObjectCommand(params);
     const uploaded1 = await s3client.send(command1);
   
-    const existingSub = await SubFolder.findOne({
+    const existingSub = await VideoSubFolder.findOne({
         SubFolderName
         : { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
     });
 
-    const existingMain = await MainFolder.findOne({
+    const existingMain = await VideoMainFolder.findOne({
         MainmostFolderName
         : { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
     });
@@ -63,7 +65,7 @@ export const createSubFolder = async (req, res) => {
       }
 
       if(!existingSub && existingMain){
-        const ArticleDetails = await SubFolder.create({
+        const ArticleDetails = await VideoSubFolder.create({
             SubFolderName,
             MainmostFolderName,
             SubFolderkey: Bannerkey,
@@ -91,7 +93,7 @@ export const createSubFolder = async (req, res) => {
   
     //   const ArticleDetails = await SubFolder.find({ MainmostFolderName: lowercaseTitle });
   
-      const ArticleDetailsbyWord = await SubFolder.find({
+      const ArticleDetailsbyWord = await VideoMainFolder.find({
         MainmostFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
       });
   
@@ -113,7 +115,7 @@ export const createSubFolder = async (req, res) => {
 
   export const getallsongs = async (req, res) => {
     try {
-      const getallsongs = await SubFolder.find(); // Retrieve all audio details from the database
+      const getallsongs = await VideoSubFolder.find(); // Retrieve all audio details from the database
   
       return res.status(200).json({
         success: "Fetched all songs",
@@ -137,7 +139,7 @@ export const createSubFolder = async (req, res) => {
   
     //   const ArticleDetails = await SubFolder.find({ MainmostFolderName: lowercaseTitle });
   
-      const ArticleDetailsbyWord = await SubFolder.find({
+      const ArticleDetailsbyWord = await VideoSubFolder.find({
         SubFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
       });
   console.log(ArticleDetailsbyWord)

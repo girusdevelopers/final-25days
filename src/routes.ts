@@ -67,22 +67,22 @@ import VideoRoute from "@routes/SubFolderVideo/Video.route"
     path: '/album',
     func: AlbumRoute,
   },
-  {
-    path: '/audiomessagecategory',
-    func: audioMessageCategoryRoute,
-  },
-  {
-    path: '/audiomessagesubcategory',
-    func: audioMessageCategorySubRoute,
-  },
+  // {
+  //   path: '/audiomessagecategory',
+  //   func: audioMessageCategoryRoute,
+  // },
+  // {
+  //   path: '/audiomessagesubcategory',
+  //   func: audioMessageCategorySubRoute,
+  // },
   {
     path: '/video',
     func: videoRoutes,
   },
-  {
-    path: '/audiomessage',
-    func: audioMessageRoute,
-  },
+  // {
+  //   path: '/audiomessage',
+  //   func: audioMessageRoute,
+  // },
   {
     path: '/mainfolder',
     func: MainFolder,
@@ -105,7 +105,7 @@ import VideoRoute from "@routes/SubFolderVideo/Video.route"
   },
 
   {
-    path: '/videoupload',
+    path: '/videomessage',
     func: VideoRoute,
   },
   {
