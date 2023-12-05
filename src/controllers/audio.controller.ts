@@ -185,12 +185,37 @@ export const updateAudioDetails = async (req, res) => {
  * @returns {Array} - List of all audio details.
  * @throws {object} - Returns a 500 error if there is an error retrieving audio details.
  */
+// export const getallsongs = async (req, res) => {
+//   try {
+//     const getallsongs = await Audio.find(); // Retrieve all audio details from the database
+
+//     return res.status(200).json({
+//       success: "Fetched all songs",
+//       getallsongs,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: "Error retrieving audio details." });
+//   }
+// };
 export const getallsongs = async (req, res) => {
   try {
-    const getallsongs = await Audio.find(); // Retrieve all audio details from the database
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 1;
+
+    const skip = (page - 1) * limit;
+
+    const getallsongs = await Audio.find()
+      .skip(skip)
+      .limit(limit);
+
+    const totalSongs = await Audio.countDocuments(); // Count total number of songs in the database
 
     return res.status(200).json({
-      success: "Fetched all songs",
+      success: "Fetched songs",
+      page,
+      limit,
+      totalSongs,
+      totalPages: Math.ceil(totalSongs / limit),
       getallsongs,
     });
   } catch (error) {
