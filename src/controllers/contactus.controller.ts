@@ -87,7 +87,7 @@ export const deleteContactMessageById = async (
 
     // Delete associated files from AWS S3
     // (Modify the field names as per your ContactUs schema)
-    await deleteS3File(deletedContactMessage.YourFileKey);
+    await deleteS3File(deletedContactMessage);
   } catch (error) {
     res.status(500).json({ error: "Error deleting contact message" });
   }

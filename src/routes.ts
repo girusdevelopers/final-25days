@@ -16,7 +16,15 @@ import MainFolder from "@routes/SubFolderPanchayithe/MainFolder.route"
 import SubFolder from "@routes/SubFolderPanchayithe/SubFolder.route"
 import AudioMesssage from "@routes/SubFolderPanchayithe/AudioMessage.route"
 import contactRoutes from "@routes/contactus.route";
-const routes = [
+
+
+
+import MainFolderRoute from "@routes/SubFolderVideo/MainFolder.route";
+import SubFolderRoute from "@routes/SubFolderVideo/SubFolder.route";
+import VideoRoute from "@routes/SubFolderVideo/Video.route"
+
+ const routes = [
+
   {
     path: '/home',
     func: HomeRoute,
@@ -71,10 +79,10 @@ const routes = [
     path: '/video',
     func: videoRoutes,
   },
-  // {
-  //   path: '/audiomessage',
-  //   func: audioMessageRoute,
-  // },
+  {
+    path: '/audiomessage',
+    func: audioMessageRoute,
+  },
   {
     path: '/mainfolder',
     func: MainFolder,
@@ -86,6 +94,19 @@ const routes = [
   {
     path: '/audiomessage',
     func: AudioMesssage,
+  },
+   {
+    path: '/mainvideofolder',
+    func: MainFolderRoute,
+  },
+  {
+    path: '/subvideofolder',
+    func: SubFolderRoute,
+  },
+
+  {
+    path: '/videoupload',
+    func: VideoRoute,
   },
   {
     path: '/ContactUs',

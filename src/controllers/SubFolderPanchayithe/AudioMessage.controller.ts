@@ -150,26 +150,7 @@ export const uploadAudioMessage = async (req, res) => {
               results,
             }); 
           }
-      // Check if there are no exact matches
-    //   if (ArticleDetails.length === 0 && ArticleDetailsbyWord.length === 0) {
-    //     return res.status(404).send("No articles found");
-    //   } else if (ArticleDetails.length === 0) {
-    // // Respond with partial matches if no exact matches are found     
-    //     return res.status(200).json(ArticleDetailsbyWord);
-    //   } else if (ArticleDetailsbyWord.length === 0) {
-    //     // Check if there are no partial matches
-    //     return res.status(200).json(ArticleDetailsbyWord);
-    //   } else {
-    //     // Both exact and partial matches found
-    //     const results = {
-    //       ArticleDetails,
-    //       ArticleDetailsbyWord,
-    //     };
-    //     res.status(200).json({
-    //       success: "successfully",
-    //       results,
-    //     }); 
-    //   }
+       
         }catch (error) {
       // Respond with a 500 error and an error message
       res.status(500).json(error);
