@@ -1,5 +1,5 @@
 import express from 'express';
-import * as SubFolder from '@controllers/SubFolderPanchayithe/SubFolder.controller'
+import * as SubFolder from '@controllers/SubFolderVideo/SubFolder.controller'
 import { upload } from '@/utils/s3service';
 
 const router = express.Router();

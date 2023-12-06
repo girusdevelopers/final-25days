@@ -2,7 +2,7 @@
 import mongoose from 'mongoose';
 const currentDate = new Date();
 const Videosubchema = new mongoose.Schema({
-    SubFolderName: {
+  SubFolderName: {
     type: String,
     required: true,
   },

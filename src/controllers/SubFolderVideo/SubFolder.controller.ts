@@ -28,11 +28,11 @@ export const createSubFolder = async (req, res) => {
   
     // console.log(AblumBanner)
     const file2Name = SubFolderBanner.originalname;
-    
+    console.log(file2Name)
     const BannerName = sanitizeFileName(file2Name);
-    console.log(BannerName)
+    
     const Bannerkey = `${uuidv4()}-${BannerName}`
-    console.log(Bannerkey)
+    // console.log(Bannerkey)
     // Upload the image to S3 bucket
     try {
     const params = {

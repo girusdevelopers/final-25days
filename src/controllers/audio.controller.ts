@@ -1,10 +1,11 @@
 import Audio from "@/models/audio.model";
 import { deleteS3File, s3client } from "@/utils/s3service";
-import { AWS_BUCKET_NAME, AWS_REGION } from "@/config";
+import { AWS_BUCKET_NAME, AWS_REGION, BASE_URL } from "@/config";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 import { sanitizeFileName } from "@/utils/SanitizeFileName";
 import Album from "@/models/album.model";
+import cron from 'node-cron';
 
 /**
  * Interface for specifying optional fields for updating audio details.
@@ -352,3 +353,37 @@ export const getAudioByName = async (req, res) => {
     res.status(500).json({ error: "Error retrieving audio details" });
   }
 };
+
+
+
+const fetchAndLogRandomSongs = async () => {
+  try {
+    // Fetch six random songs
+    const randomSongs = await Audio.aggregate([{ $sample: { size: 6 } }]);
+    // console.log('Fetched random songs:', randomSongs);
+    return randomSongs
+    // Log the fetched songs
+
+  } catch (error) {
+    // console.error('Error retrieving random songs:', error);
+    return error
+  
+  }
+};
+
+// Schedule the task to run every 5 minutes
+
+cron.schedule('*/5 * * * *', () => {
+  fetchAndLogRandomSongs();
+});
+
+export const randomsongs = async (req, res) => {
+
+  const ranadomsongs=await fetchAndLogRandomSongs();
+  
+  // console.log(ranadomsongs)
+  res.status(200).json({
+    success:
+    ranadomsongs})
+
+}

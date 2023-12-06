@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as Music from "@/controllers/audio.controller"
 import { upload } from "@/utils/s3service";
+
 const router = Router();
 
 
@@ -36,6 +37,7 @@ router.put('/updateAudio/:id', Music.updateAudioDetails);//update
  */
 router.get('/getall', Music.getallsongs);//getall
 router.get('/allsongs', Music.allsongs);//getall
+router.get('/random', Music.randomsongs);//getall
 
 
 
@@ -63,6 +65,8 @@ router.get('/getbyId/:id', Music.getAudioById);//getById
  * @throws {object} - Returns a 500 error if there is an error retrieving audio details.
  */
 router.get('/:name', Music.getAudioByName);//getById
+// router.get('/randomSongs', Music.fetchAndLogRandomSongs);
+
 
 
 export default router;

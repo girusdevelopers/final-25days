@@ -24,9 +24,9 @@ export const createMainFolder = async (req, res) => {
   
     // console.log(AblumBanner)
     const file2Name = MainFolderBanner.originalname;
-    
+    console.log(file2Name)
     const BannerName = sanitizeFileName(file2Name);
-    // console.log(BannerName)
+   
     const Bannerkey = `${uuidv4()}-${BannerName}`
     // console.log(Bannerkey)
     // Upload the image to S3 bucket
@@ -99,7 +99,7 @@ export const createMainFolder = async (req, res) => {
     }
   };
 
-  export const getallsongs = async (req, res) => {
+  export const allmainvieofolders = async (req, res) => {
     try {
       const getallsongs = await VideoMainFolder.find(); // Retrieve all audio details from the database
   
