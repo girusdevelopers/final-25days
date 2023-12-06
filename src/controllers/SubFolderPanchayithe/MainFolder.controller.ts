@@ -75,16 +75,16 @@ export const createMainFolder = async (req, res) => {
   
       // const ArticleDetails = await MainFolder.find({ MainFolderName: lowercaseTitle });
   
-      const ArticleDetailsbyWord = await MainFolder.find({
+      const MainFolderDetailsbyWord = await MainFolder.find({
         MainFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
       });
-      if (ArticleDetailsbyWord.length === 0) {
+      if (MainFolderDetailsbyWord.length === 0) {
             // Check if there are no partial matches
             return res.status(200).json("not found");
           } else {
             // Both exact and partial matches found
             const results = {
-              ArticleDetailsbyWord,
+              MainFolderDetailsbyWord,
             };
             res.status(200).json({
               success: "successfully",
