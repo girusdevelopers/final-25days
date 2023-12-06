@@ -98,6 +98,7 @@ import { AWS_BUCKET_NAME, AWS_REGION } from '@/config';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { deleteS3File, s3client } from '@/utils/s3service';
 import { v4 as uuidv4 } from 'uuid';
+import mongoose from 'mongoose';
 
 interface UpdateFields {
   ArticleTitle?: string;
@@ -341,5 +342,31 @@ export const deleteArticleById = async (req, res) => {
     return res.status(500).json({ error: "Error deleting audio details" });
   }
 };
+
+
+
+export const getArticleById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // if (!mongoose.Types.ObjectId.isValid(id)) {
+    //   return res.status(400).json({ error: 'Invalid articleId format' });
+    // }
+
+    // Find the article by ID
+    const article = await Article.findById(id);
+
+    // Check if the article with the given ID exists
+    if (!article) {
+      return res.status(404).json({ error: 'Article not found' });
+    }
+
+    res.status(200).json(article);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch the article' });
+  }
+};
+
 
 

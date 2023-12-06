@@ -15,5 +15,9 @@ router.delete('/delete/:id',video.deleteVideoById);
 
 router.get("/:name", video.getVideoByName)
 
+// Add this route to handle getting a video by ID
+router.get('/video/:id',video.getVideoById);
+
+
 
 export default router;

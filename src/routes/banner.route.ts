@@ -23,4 +23,8 @@ router.get('/allbanners',Banner.OfflineAndOnline)
 router.delete('/delete/:id',Banner.deletebanner)
 router.put('/updatestatus/:bannerId',Banner.UpdateBannerStatus)
 
+// Add this route to handle getting a banner by ID
+router.get('/banner/:id',Banner.getBannerById);
+
+
 export default router;

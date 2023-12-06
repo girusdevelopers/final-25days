@@ -15,6 +15,9 @@ router.get('/getall',SubFolder.getallsongs); // Get all articles
 // router.delete('/delete/:id', Album.deleteAlbumById); // Delete an article by ID
 
 // router.delete('/delete/:id', Article.deleteArticleById);//deleteById
+// Add this route to handle getting a SubFolder by ID
+router.get('/sub-folder/:id',SubFolder.getSubFolderById);
+
 
 
 export default router;

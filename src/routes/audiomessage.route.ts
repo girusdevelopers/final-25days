@@ -17,4 +17,8 @@ router.delete('/delete/:folderName', AudioMessage.deletefolderNameByName);//dele
 
 router.get('/:name', AudioMessage.getFolderByName);//getByFolderName
 
+// Add this route to handle getting an audio message by ID
+// router.get('/audio-message/:id',AudioMessage.g);
+
+
 export default router;

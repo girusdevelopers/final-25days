@@ -92,3 +92,28 @@ export const updateAdminCredentials = async (req, res) => {
   }
 };
 
+
+export const getAdminById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    // Find an admin by ID
+    const admin = await Admin.findById(id);
+
+    if (!admin) {
+      return res.status(404).json({ error: "Admin not found" });
+    }
+
+    // Do not include sensitive information like the password in the response
+    const { email } = admin.toObject();
+
+    res.status(200).json({
+      id,
+      email,
+    });
+  } catch (error) {
+    // Handle any errors that occurred during the retrieval process
+    console.error(error);
+    res.status(500).json({ error: "Error retrieving admin details" });
+  }
+};

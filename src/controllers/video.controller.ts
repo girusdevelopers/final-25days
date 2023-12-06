@@ -170,3 +170,30 @@ export const getVideoByName = async (req, res) => {
     }
   };
   
+  export const getVideoById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+  
+    try {
+      // Find a video by ID
+      const video = await Video.findById(id);
+  
+      if (!video) {
+        return res.status(404).json({ error: "Video not found" });
+      }
+  
+      // Do not include sensitive information like the password in the response
+      const { VideoTitle, description, YouTube_Url, Banner_Location } = video.toObject();
+  
+      res.status(200).json({
+        id,
+        VideoTitle,
+        description,
+        YouTube_Url,
+        Banner_Location,
+      });
+    } catch (error) {
+      // Handle any errors that occurred during the retrieval process
+      console.error(error);
+      res.status(500).json({ error: "Error retrieving video details" });
+    }
+  };

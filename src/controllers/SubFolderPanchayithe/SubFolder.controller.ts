@@ -155,3 +155,33 @@ export const createSubFolder = async (req, res) => {
     }
   };
 
+  export const getSubFolderById = async (req,res) => {
+    const { id } = req.params;
+  
+    try {
+      // Find a SubFolder by ID
+      const subFolder = await SubFolder.findById(id);
+  
+      if (!subFolder) {
+        return res.status(404).json({ error: "SubFolder not found" });
+      }
+  
+      // Do not include sensitive information like the folder key in the response
+      const {
+        SubFolderName,
+        MainmostFolderName,
+        SubFolder_banner,
+      } = subFolder.toObject();
+  
+      res.status(200).json({
+        id,
+        SubFolderName,
+        MainmostFolderName,
+        SubFolder_banner,
+      });
+    } catch (error) {
+      // Handle any errors that occurred during the retrieval process
+      console.error(error);
+      res.status(500).json({ error: "Error retrieving SubFolder details" });
+    }
+  };

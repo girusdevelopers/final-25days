@@ -13,7 +13,11 @@ router.put("/update/:id",message.UpdateMessage)
 
 router.delete('/delete/:id',message.deleteMessageById);
 
-router.get("/:name", message.getMessageByName)
+router.get("/:name", message.getMessageByName);
+
+// Add this route to handle getting a message by ID
+router.get('/message/:id',message. getMessageById);
+
 
 
 export default router;

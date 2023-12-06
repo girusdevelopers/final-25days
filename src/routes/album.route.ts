@@ -12,6 +12,9 @@ router.get('/:name',Album.getAlbumByName);//Get a specific article by word
 router.put('/Update/:id', Album.UpdateAlbumTitle); // Update an article by ID
 router.delete('/delete/:id', Album.deleteAlbumById); // Delete an article by ID
 
+// Add this route to handle getting an album by ID
+router.get('/album/:id',Album.getAlbumById);
+
 // router.delete('/delete/:id', Article.deleteArticleById);//deleteById
 
 

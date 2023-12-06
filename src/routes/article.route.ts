@@ -11,6 +11,7 @@ router.get('/getall', ArticleController.getArticles);
 router.get('/article/:name',ArticleController.getArticleByWord);
 router.put('/updateArticle/:id', ArticleController.updateArticle);
 router.delete('/delete/:id', ArticleController.deleteArticleById);
-// Add other routes as needed
+router.get('/byid/:id',ArticleController.getArticleById);
 
+// Add other routes as needed
 export default router;

@@ -116,6 +116,29 @@ export const forgotPassword = async (req, res) => {
       res.status(500).json({ message: 'An error occurred while resetting the password' });
     }
   };
+
+  export const getUserById = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Find a user by ID
+      const user = await User.findById(id);
+  
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      // Do not include sensitive information like the password in the response
+      const { name, phone, email } = user.toObject();
+  
+      res.status(200).json({ id, name, phone, email });
+    } catch (error) {
+      // Handle any errors that occurred during the retrieval process
+      console.error(error);
+      res.status(500).json({ error: "Error retrieving user details" });
+    }
+  };
+  
     
 
   

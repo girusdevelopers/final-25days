@@ -14,6 +14,9 @@ router.get('/sub/:SubFolderName',AudioMessage.getsubFolderByName);//Get a specif
 // router.delete('/delete/:id', Album.deleteAlbumById); // Delete an article by ID
 
 // router.delete('/delete/:id', Article.deleteArticleById);//deleteById
+// Add this route to handle getting an audio message by ID
+router.get('/audio-message/:id',AudioMessage.getAudioMessageById);
+
 
 
 export default router;

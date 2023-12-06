@@ -206,3 +206,23 @@ export const deleteMagazineByID = async (req, res) => {
     return res.status(500).json({ error: "Error deleting audio details" });
   }
 };
+
+export const getMagazineById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find a magazine by ID
+    const magazine = await Magazine.findById(id);
+
+    if (!magazine) {
+      return res.status(404).json({ error: "Magazine not found" });
+    }
+
+    res.status(200).json(magazine);
+  } catch (error) {
+    // Handle any errors that occurred during the retrieval process
+    console.error(error);
+    res.status(500).json({ error: "Error retrieving magazine details" });
+  }
+};
+

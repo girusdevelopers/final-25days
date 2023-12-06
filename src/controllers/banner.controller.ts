@@ -146,3 +146,35 @@ export const UpdateBannerStatus =async(req,res)=>{
   }
 
 }
+
+
+export const getBannerById = async (req,res) => {
+  const { id } = req.params;
+
+  try {
+    // Find a banner by ID
+    const banner = await Banner.findById(id);
+
+    if (!banner) {
+      return res.status(404).json({ error: "Banner not found" });
+    }
+
+    // Do not include sensitive information like the banner key in the response
+    const {
+      bannerKey,
+      Banner_location,
+      status,
+    } = banner.toObject();
+
+    res.status(200).json({
+      id,
+      bannerKey,
+      Banner_location,
+      status,
+    });
+  } catch (error) {
+    // Handle any errors that occurred during the retrieval process
+    console.error(error);
+    res.status(500).json({ error: "Error retrieving banner details" });
+  }
+};

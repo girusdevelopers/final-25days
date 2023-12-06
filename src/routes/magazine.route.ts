@@ -11,5 +11,7 @@ router.get('/getall', Magazine.allmagazine);
 router.put('/updatemagazine/:id', Magazine.updateMagazineDetails);
 router.get('/:name', Magazine.getMagazineByName);
 router.delete('/delete/:id', Magazine.deleteMagazineByID);
+router.get('/magazine/:id',Magazine. getMagazineById);
+
 
 export default router;

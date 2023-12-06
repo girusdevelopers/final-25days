@@ -188,3 +188,41 @@ export const uploadAudioMessage = async (req, res) => {
 
 
 
+  export const getAudioMessageById = async (req,res) => {
+    const { id } = req.params;
+  
+    try {
+      // Find an audio message by ID
+      const audioMessage = await AudioMesssage.findById(id);
+  
+      if (!audioMessage) {
+        return res.status(404).json({ error: "Audio message not found" });
+      }
+  
+      // Do not include sensitive information like the music key or banner key in the response
+      const {
+        AudioMesssagetitle,
+        artist,
+        description,
+        MainmostFolderName,
+        SubFolderName,
+        AudioMesssage_location,
+        AudioMesssageBanner_location,
+      } = audioMessage.toObject();
+  
+      res.status(200).json({
+        id,
+        AudioMesssagetitle,
+        artist,
+        description,
+        MainmostFolderName,
+        SubFolderName,
+        AudioMesssage_location,
+        AudioMesssageBanner_location,
+      });
+    } catch (error) {
+      // Handle any errors that occurred during the retrieval process
+      console.error(error);
+      res.status(500).json({ error: "Error retrieving audio message details" });
+    }
+  };

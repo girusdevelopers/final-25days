@@ -188,3 +188,30 @@ export const createAlbum = async (req, res) => {
     }
   };
   
+
+  export const getAlbumById = async (req,res) => {
+    const { id } = req.params;
+  
+    try {
+      // Find an album by ID
+      const album = await Album.findById(id);
+  
+      if (!album) {
+        return res.status(404).json({ error: "Album not found" });
+      }
+  
+      // Do not include sensitive information like the password in the response
+      const { AlbumName, album_banner } = album.toObject();
+  
+      res.status(200).json({
+        id,
+        AlbumName,
+        album_banner,
+      });
+    } catch (error) {
+      // Handle any errors that occurred during the retrieval process
+      console.error(error);
+      res.status(500).json({ error: "Error retrieving album details" });
+    }
+  };
+  

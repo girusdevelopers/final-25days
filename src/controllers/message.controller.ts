@@ -169,3 +169,23 @@ export const getMessageByName = async (req, res) => {
     }
   };
   
+
+  export const getMessageById = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Find a message by ID
+      const message = await Message.findById(id);
+  
+      if (!message) {
+        return res.status(404).json({ error: "Message not found" });
+      }
+  
+      res.status(200).json(message);
+    } catch (error) {
+      // Handle any errors that occurred during the retrieval process
+      console.error(error);
+      res.status(500).json({ error: "Error retrieving message details" });
+    }
+  };
+  

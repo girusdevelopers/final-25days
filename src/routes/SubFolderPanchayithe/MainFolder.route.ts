@@ -13,6 +13,9 @@ router.get('/:MainFolderName',MainFolder.getMainFolderByName);//Get a specific a
 // router.delete('/delete/:id', Album.deleteAlbumById); // Delete an article by ID
 
 // router.delete('/delete/:id', Article.deleteArticleById);//deleteById
+// Add this route to handle getting a Main Folder by ID
+router.get('/main-folder/:id',MainFolder.getMainFolderById);
+
 
 
 export default router;

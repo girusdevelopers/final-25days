@@ -111,3 +111,33 @@ export const createMainFolder = async (req, res) => {
     }
   };
   
+  export const getMainFolderById = async (req,res) => {
+    const { id } = req.params;
+  
+    try {
+      // Find a Main Folder by ID
+      const mainFolder = await MainFolder.findById(id);
+  
+      if (!mainFolder) {
+        return res.status(404).json({ error: "Main Folder not found" });
+      }
+  
+      // Do not include sensitive information like the folder key in the response
+      const {
+        MainmostFolderName,
+        SubfolderinMainfolder,
+        MainmostFolderName_banner,
+      } = mainFolder.toObject();
+  
+      res.status(200).json({
+        id,
+        MainmostFolderName,
+        SubfolderinMainfolder,
+        MainmostFolderName_banner,
+      });
+    } catch (error) {
+      // Handle any errors that occurred during the retrieval process
+      console.error(error);
+      res.status(500).json({ error: "Error retrieving Main Folder details" });
+    }
+  };
