@@ -8,77 +8,139 @@ import { v4 as uuidv4 } from "uuid";
 
 
 
-export const createSubFolder = async (req, res) => {
-    const { SubFolderName,MainmostFolderName } = req.body;
-    const SubFolderBanner = req.file;
+// export const createSubFolder = async (req, res) => {
+//     const { SubFolderName,MainmostFolderName } = req.body;
+//     const SubFolderBanner = req.file;
 
-    if (!SubFolderName) {
-      return res.status(400).json({ error: "SubFolderName required field" });
-    }
+//     if (!SubFolderName) {
+//       return res.status(400).json({ error: "SubFolderName required field" });
+//     }
 
-    if (!MainmostFolderName) {
-      return res.status(400).json({ error: "MainmostFolderName required field" });
-    }
+//     if (!MainmostFolderName) {
+//       return res.status(400).json({ error: "MainmostFolderName required field" });
+//     }
 
-    if (!SubFolderBanner) {
-      return res.status(400).json({ error: "SubFolderBanner required file" });
-    }
+//     if (!SubFolderBanner) {
+//       return res.status(400).json({ error: "SubFolderBanner required file" });
+//     }
   
-    // console.log(AblumBanner)
-    const file2Name = SubFolderBanner.originalname;
+//     // console.log(AblumBanner)
+//     const file2Name = SubFolderBanner.originalname;
     
-    const BannerName = sanitizeFileName(file2Name);
-    console.log(BannerName)
-    const Bannerkey = `${uuidv4()}-${BannerName}`
-    console.log(Bannerkey)
-    // Upload the image to S3 bucket
-    try {
+//     const BannerName = sanitizeFileName(file2Name);
+//     console.log(BannerName)
+//     const Bannerkey = `${uuidv4()}-${BannerName}`
+//     console.log(Bannerkey)
+//     // Upload the image to S3 bucket
+//     try {
+//     const params = {
+//       Bucket: AWS_BUCKET_NAME,
+//       Key: `uploads/${Bannerkey}`,
+//       Body: SubFolderBanner.buffer,
+//       ContentType: SubFolderBanner.mimetype,
+//     };
+//   // Execute S3 upload command  
+//     const command1 = new PutObjectCommand(params);
+//     const uploaded1 = await s3client.send(command1);
+  
+//     const existingSub = await SubFolder.findOne({
+//         SubFolderName
+//         : { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
+//     });
+
+//     const existingMain = await MainFolder.findOne({
+//         MainmostFolderName
+//         : { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
+//     });
+//     // console.log(existingMain)
+  
+//       if (!existingMain) {
+//         return res.status(400).json({ message:`${MainmostFolderName} doesnt exist please create a main folder`});
+//       }
+
+//       if(existingSub){
+//         return res.status(400).json({ message:`${SubFolderName} already exits please cahnge the name`});
+//       }
+
+//       if(!existingSub && existingMain){
+//         const ArticleDetails = await SubFolder.create({
+//             SubFolderName,
+//             MainmostFolderName,
+//             SubFolderkey: Bannerkey,
+//             SubFolder_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
+//           });
+//        // Respond with the created article details   
+//           res.status(201).json(ArticleDetails);
+//       }
+//   // Create a new article with the uploaded banner details  
+     
+//     } catch (error) {
+//    // Handle errors during article creation/upload   
+//       res.status(500).json(error);
+//     }
+//   };
+
+export const createSubFolder = async (req, res) => {
+  const { SubFolderName, MainmostFolderName } = req.body;
+  const SubFolderBanner = req.file;
+
+  if (!SubFolderName) {
+    return res.status(400).json({ error: "SubFolderName required field" });
+  }
+
+  if (!MainmostFolderName) {
+    return res.status(400).json({ error: "MainmostFolderName required field" });
+  }
+
+  if (!SubFolderBanner) {
+    return res.status(400).json({ error: "SubFolderBanner required file" });
+  }
+
+  const file2Name = SubFolderBanner.originalname;
+  const BannerName = sanitizeFileName(file2Name);
+  const Bannerkey = `${uuidv4()}-${BannerName}`;
+
+  try {
     const params = {
       Bucket: AWS_BUCKET_NAME,
       Key: `uploads/${Bannerkey}`,
       Body: SubFolderBanner.buffer,
       ContentType: SubFolderBanner.mimetype,
     };
-  // Execute S3 upload command  
+
     const command1 = new PutObjectCommand(params);
-    const uploaded1 = await s3client.send(command1);
-  
-    const existingSub = await SubFolder.findOne({
-        SubFolderName
-        : { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
-    });
+    await s3client.send(command1);
 
     const existingMain = await MainFolder.findOne({
-        MainmostFolderName
-        : { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
+      MainmostFolderName: { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
     });
-    // console.log(existingMain)
-  
-      if (!existingMain) {
-        return res.status(400).json({ message:`${MainmostFolderName} doesnt exist please create a main folder`});
-      }
 
-      if(existingSub){
-        return res.status(400).json({ message:`${SubFolderName} already exits please cahnge the name`});
-      }
-
-      if(!existingSub && existingMain){
-        const ArticleDetails = await SubFolder.create({
-            SubFolderName,
-            MainmostFolderName,
-            SubFolderkey: Bannerkey,
-            SubFolder_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
-          });
-       // Respond with the created article details   
-          res.status(201).json(ArticleDetails);
-      }
-  // Create a new article with the uploaded banner details  
-     
-    } catch (error) {
-   // Handle errors during article creation/upload   
-      res.status(500).json(error);
+    if (!existingMain) {
+      return res.status(400).json({ message: `${MainmostFolderName} doesn't exist; please create a main folder` });
     }
-  };
+
+    // Check for the existence of a subfolder with the same name within the specified main folder
+    const existingSub = await SubFolder.findOne({
+      SubFolderName: { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
+      MainmostFolderName,
+    });
+
+    if (existingSub) {
+      return res.status(400).json({ message: `${SubFolderName} already exists in ${MainmostFolderName}; please change the name` });
+    }
+
+    const ArticleDetails = await SubFolder.create({
+      SubFolderName,
+      MainmostFolderName,
+      SubFolderkey: Bannerkey,
+      SubFolder_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
+    });
+
+    res.status(201).json(ArticleDetails);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
   
   export const getMainFolderinsubFolderByName = async (req, res) => {
     // Extract the name parameter from the request
