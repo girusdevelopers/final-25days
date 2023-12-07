@@ -6,7 +6,13 @@ const subchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   MainmostFolderName: {
+    type: String,
+    required: true,
+  },
+
+  audiomessagessubfolder: {
     type: String,
     required: true,
   },
@@ -18,6 +24,7 @@ const subchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   createdAt: {
     type: Date,
    default: currentDate,

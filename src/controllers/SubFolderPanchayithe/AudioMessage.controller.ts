@@ -107,6 +107,13 @@ export const uploadAudioMessage = async (req, res) => {
             AudioMesssage_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params1.Key}`,
             AudioMesssageBanner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params2.Key}`,
           });
+
+          // const ArticleDetails = await MainFolder.create({
+          //   MainmostFolderName,
+          //   SubfolderinMainfolder:`${BASE_URL}/v1/subfolder/main/${MainmostFolderName}`,
+          //   MainmostFolderNamekey: Bannerkey,
+          //   MainmostFolderName_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
+          // });
       
           // Respond with success message and the created audio entry
           return res.status(201).json({
