@@ -233,3 +233,17 @@ export const uploadAudioMessage = async (req, res) => {
       res.status(500).json({ error: "Error retrieving audio message details" });
     }
   };
+
+
+  export const getallaudiomessage = async (req, res) => {
+    try {
+      const getallsongs = await AudioMesssage.find(); // Retrieve all audio details from the database
+  
+      return res.status(200).json({
+        success: "Fetched all songs",
+        getallsongs,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Error retrieving audio details." });
+    }
+  };
