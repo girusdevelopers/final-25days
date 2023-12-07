@@ -1,4 +1,4 @@
-import { AWS_BUCKET_NAME, AWS_REGION } from "@/config";
+import { AWS_BUCKET_NAME, AWS_REGION, BASE_URL } from "@/config";
 import MainFolder from "@/models/SubFolderPanchayithe/MainFolder.model";
 import SubFolder from "@/models/SubFolderPanchayithe/SubFolder.model";
 import { sanitizeFileName } from "@/utils/SanitizeFileName";
@@ -133,6 +133,7 @@ export const createSubFolder = async (req, res) => {
       SubFolderName,
       MainmostFolderName,
       SubFolderkey: Bannerkey,
+      audiomessagessubfolder:`${BASE_URL}/v1/audiomessage/${SubFolderName}`,
       SubFolder_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
     });
 

@@ -7,6 +7,7 @@ const router = express.Router();
 // Define routes for article operations
 router.post("/audioupload", upload.fields([{ name: 'Music', maxCount: 1 }, { name: 'Banner', maxCount: 1 }]), AudioMessage.uploadAudioMessage);//upload
 // router.get('/getall', Album.getallAlbums); // Get all articles
+router.get('/getall', AudioMessage.getallaudiomessage);
 // // router.get('/:id', Article.getArticleById); // Get a specific article by ID
 router.get('/main/:MainFolderName',AudioMessage.getMainFolderByName);//Get a specific article by word
 router.get('/sub/:SubFolderName',AudioMessage.getsubFolderByName);//Get a specific article by word

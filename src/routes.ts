@@ -16,6 +16,7 @@ import MainFolder from "@routes/SubFolderPanchayithe/MainFolder.route"
 import SubFolder from "@routes/SubFolderPanchayithe/SubFolder.route"
 import AudioMesssage from "@routes/SubFolderPanchayithe/AudioMessage.route"
 import contactRoutes from "@routes/contactus.route";
+import shortRoutes from "@routes/shorts.route"
 
 
 
@@ -112,6 +113,11 @@ import VideoRoute from "@routes/SubFolderVideo/Video.route"
     path: '/ContactUs',
     func: contactRoutes,
   },
+  {
+    path: '/shorts',
+    func: shortRoutes,
+  },
+
 
 ];
 
