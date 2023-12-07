@@ -1,8 +1,8 @@
 
 import { AWS_BUCKET_NAME, AWS_REGION } from "@/config";
 import Video from "@/models/SubFolderVideo/Video.model";
-import MainFolder from "@/models/SubFolderPanchayithe/MainFolder.model";
-import SubFolder from "@/models/SubFolderPanchayithe/SubFolder.model";
+import MainFolder from "@/models/SubFolderVideo/MainFolder.model";
+import SubFolder from "@/models/SubFolderVideo/SubFolder.model";
 import { sanitizeFileName } from "@/utils/SanitizeFileName";
 import { s3client } from "@/utils/s3service";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
