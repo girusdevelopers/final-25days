@@ -1,12 +1,11 @@
 import { AWS_BUCKET_NAME, AWS_REGION, BASE_URL } from "@/config";
-import MainFolder from "@/models/SubFolderPanchayithe/MainFolder.model";
-import VideoMainFolder from "@/models/SubFolderVideo/MainFolder.model";
+ import VideoMainFolder from "@/models/SubFolderVideo/MainFolder.model";
 
 import { sanitizeFileName } from "@/utils/SanitizeFileName";
 import { s3client } from "@/utils/s3service";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
-
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 
 
@@ -24,9 +23,9 @@ export const createMainFolder = async (req, res) => {
   
     // console.log(AblumBanner)
     const file2Name = MainFolderBanner.originalname;
-    console.log(file2Name)
+    
     const BannerName = sanitizeFileName(file2Name);
-   
+    // console.log(BannerName)
     const Bannerkey = `${uuidv4()}-${BannerName}`
     // console.log(Bannerkey)
     // Upload the image to S3 bucket
@@ -41,74 +40,117 @@ export const createMainFolder = async (req, res) => {
     const command1 = new PutObjectCommand(params);
     const uploaded1 = await s3client.send(command1);
   
-    const existingAlbum = await VideoMainFolder.findOne({
+    const existingFolder = await VideoMainFolder.findOne({
       MainmostFolderName
         : { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
     });
   
-      if (existingAlbum) {
+      if (existingFolder) {
         return res.status(400).json({ message:"this folder name already exists please change folder name"});
       }
   // Create a new article with the uploaded banner details  
-      const ArticleDetails = await VideoMainFolder.create({
+      const VideoMessageDetails = await VideoMainFolder.create({
         MainmostFolderName,
         SubfolderinMainfolder:`${BASE_URL}/v1/subfolder/${MainmostFolderName}`,
         MainmostFolderNamekey: Bannerkey,
         MainmostFolderName_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
       });
    // Respond with the created article details   
-      res.status(201).json(ArticleDetails);
+      res.status(201).json(VideoMessageDetails);
     } catch (error) {
    // Handle errors during article creation/upload   
       res.status(500).json(error);
     }
   };
 
-
-  export const getMainFolderByName = async (req, res) => {
-    // Extract the name parameter from the request
+  export const getAllMainFolders = async (req, res) => {
     try {
-     const { MainFolderName } = req.params;
-       console.log(MainFolderName)
-      // Convert the name to lowercase for a case-insensitive search
-      const lowercaseTitle = MainFolderName.toLowerCase();
+      // Retrieve all main folders from the database
+      const allMainFolders = await VideoMainFolder.find();
   
+      // If there are no main folders, return an empty array
+      if (!allMainFolders || allMainFolders.length === 0) {
+        return res.status(404).json({ message: 'No main folders found' });
+      }
   
-      // const ArticleDetails = await MainFolder.find({ MainFolderName: lowercaseTitle });
+      // Modify the main folders to include links or other necessary details
+      const modifiedMainFolders = allMainFolders.map((folder) => ({
+        MainmostFolderName: folder.MainmostFolderName,
+        SubfolderinMainfolder: `${BASE_URL}/v1/subfolder/${folder.MainmostFolderName}`,
+        MainmostFolderName_banner: folder.MainmostFolderName_banner,
+      }));
   
-      const ArticleDetailsbyWord = await VideoMainFolder.find({
-        MainFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
-      });
-      if (ArticleDetailsbyWord.length === 0) {
-            // Check if there are no partial matches
-            return res.status(200).json("not found");
-          } else {
-            // Both exact and partial matches found
-            const results = {
-              ArticleDetailsbyWord,
-            };
-            res.status(200).json({
-              success: "successfully",
-              results,
-            }); 
-          }
-       
-        }catch (error) {
-      // Respond with a 500 error and an error message
+      // Respond with the modified main folders
+      res.status(200).json(modifiedMainFolders);
+    } catch (error) {
+      // Handle errors during retrieval
       res.status(500).json(error);
     }
   };
 
-  export const allmainvieofolders = async (req, res) => {
-    try {
-      const getallsongs = await VideoMainFolder.find(); // Retrieve all audio details from the database
   
-      return res.status(200).json({
-        success: "Fetched all songs",
-        getallsongs,
-      });
-    } catch (error) {
-      res.status(500).json({ error: "Error retrieving audio details." });
+export const getMainFolderByName = async (req, res) => {
+  try {
+    // Extract the MainmostFolderName parameter from the request
+    const { MainmostFolderName } = req.params;
+
+    // Retrieve the Main Folder from the database by name
+    const mainFolder = await VideoMainFolder.findOne({
+      MainmostFolderName: { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
+    });
+
+    // If the Main Folder is not found, return a 404 response
+    if (!mainFolder) {
+      return res.status(404).json({ message: 'Main Folder not found' });
     }
-  };
+
+    // Respond with the details of the Main Folder
+    res.status(200).json({
+      MainmostFolderName: mainFolder.MainmostFolderName,
+      SubfolderinMainfolder: `${BASE_URL}/v1/subfolder/${mainFolder.MainmostFolderName}`,
+      MainmostFolderName_banner: mainFolder.MainmostFolderName_banner,
+    });
+  } catch (error) {
+    // Handle errors during retrieval
+    res.status(500).json(error);
+  }
+};
+
+  
+
+export const deleteMainFolder = async (req, res) => {
+  const { MainmostFolderName } = req.params;
+
+  try {
+    // Find the MainFolder by MainmostFolderName
+    const existingFolder = await VideoMainFolder.findOne({
+      MainmostFolderName: {
+        $regex: new RegExp(`^${MainmostFolderName}$`, 'i'),
+      },
+    });
+
+    if (!existingFolder) {
+      return res.status(404).json({ message: "MainFolder not found" });
+    }
+
+    // Delete the MainFolder from the database
+    await VideoMainFolder.deleteOne({ MainmostFolderName });
+
+    // Delete the MainFolder's banner from S3
+    const params = {
+      Bucket: AWS_BUCKET_NAME,
+      Key: `uploads/${existingFolder.MainmostFolderNamekey}`,
+    };
+
+    const deleteCommand = new DeleteObjectCommand(params);
+    await s3client.send(deleteCommand);
+
+    res.status(200).json({ message: "MainFolder deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+  
   

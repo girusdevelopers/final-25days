@@ -1,6 +1,4 @@
 import { AWS_BUCKET_NAME, AWS_REGION } from "@/config";
-import MainFolder from "@/models/SubFolderPanchayithe/MainFolder.model";
-import SubFolder from "@/models/SubFolderPanchayithe/SubFolder.model";
 import VideoMainFolder from "@/models/SubFolderVideo/MainFolder.model";
 import VideoSubFolder from "@/models/SubFolderVideo/SubFolder.model";
 import { sanitizeFileName } from "@/utils/SanitizeFileName";
@@ -8,7 +6,8 @@ import { s3client } from "@/utils/s3service";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 
-
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+  
 
 export const createSubFolder = async (req, res) => {
     const { SubFolderName,MainmostFolderName } = req.body;
@@ -28,11 +27,11 @@ export const createSubFolder = async (req, res) => {
   
     // console.log(AblumBanner)
     const file2Name = SubFolderBanner.originalname;
-    console.log(file2Name)
-    const BannerName = sanitizeFileName(file2Name);
     
+    const BannerName = sanitizeFileName(file2Name);
+    console.log(BannerName)
     const Bannerkey = `${uuidv4()}-${BannerName}`
-    // console.log(Bannerkey)
+    console.log(Bannerkey)
     // Upload the image to S3 bucket
     try {
     const params = {
@@ -113,16 +112,16 @@ export const createSubFolder = async (req, res) => {
 
 
 
-  export const getallsongs = async (req, res) => {
+  export const getallsubfolders = async (req, res) => {
     try {
-      const getallsongs = await VideoSubFolder.find(); // Retrieve all audio details from the database
+      const getallsubfolders = await VideoSubFolder.find(); // Retrieve all audio details from the database
   
       return res.status(200).json({
-        success: "Fetched all songs",
-        getallsongs,
+        success: "Fetched all SubFolders",
+        getallsubfolders,
       });
     } catch (error) {
-      res.status(500).json({ error: "Error retrieving audio details." });
+      res.status(500).json({ error: "Error retrieving SubFolder details." });
     }
   };
   
@@ -139,21 +138,56 @@ export const createSubFolder = async (req, res) => {
   
     //   const ArticleDetails = await SubFolder.find({ MainmostFolderName: lowercaseTitle });
   
-      const ArticleDetailsbyWord = await VideoSubFolder.find({
+      const SubFolderDetailsbyWord = await VideoSubFolder.find({
         SubFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
       });
-  console.log(ArticleDetailsbyWord)
-    if (ArticleDetailsbyWord.length === 0) {
+  console.log(SubFolderDetailsbyWord)
+    if (SubFolderDetailsbyWord.length === 0) {
             // Check if there are no partial matches
             return res.status(400).json(`no sub filders by ${SubFolderName} found`);
     }
         res.status(200).json({
           success: "successfully",
-          ArticleDetailsbyWord,
+          SubFolderDetailsbyWord,
         }); 
     } catch (error) {
       // Respond with a 500 error and an error message
       res.status(500).json(error);
     }
   };
-
+ 
+  
+  export const deleteSubFolder = async (req, res) => {
+    const { SubFolderName } = req.params;
+  
+    try {
+      // Find the SubFolder by SubFolderName
+      const existingSubFolder = await VideoSubFolder.findOne({
+        SubFolderName: {
+          $regex: new RegExp(`^${SubFolderName}$`, 'i'),
+        },
+      });
+  
+      if (!existingSubFolder) {
+        return res.status(404).json({ message: "SubFolder not found" });
+      }
+  
+      // Delete the SubFolder from the database
+      await VideoSubFolder.deleteOne({ SubFolderName });
+  
+      // Delete the SubFolder's banner from S3
+      const params = {
+        Bucket: AWS_BUCKET_NAME,
+        Key: `uploads/${existingSubFolder.SubFolderkey}`,
+      };
+  
+      const deleteCommand = new DeleteObjectCommand(params);
+      await s3client.send(deleteCommand);
+  
+      res.status(200).json({ message: "SubFolder deleted successfully" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
+  
