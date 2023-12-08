@@ -24,7 +24,7 @@ const router = express.Router();
 router.post("/upload",VideoMessage.uploadVideoMessage);  
  router.get("/main/:MainFolderName", VideoMessage.getMainFolderByName);  
 router.get("/sub/:SubFolderName", VideoMessage.getsubFolderByName);  
-router.get("/getAllVideos",VideoMessage.getAllVideos);
+router.get("/getall",VideoMessage.getAllVideos);
 router.get("/getVideoByTitle/:Videotitle", VideoMessage.getVideoByTitle);
 router.delete("/deleteVideoByTitle/:Videotitle", VideoMessage.deleteVideoByTitle);
 
