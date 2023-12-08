@@ -14,7 +14,7 @@ router.get('/sub/:SubFolderName',AudioMessage.getsubFolderByName);//Get a specif
 // router.put('/Update/a:id', Album.UpdateAlbumTitle); // Update an article by ID
 // router.delete('/delete/:id', Album.deleteAlbumById); // Delete an article by ID
 
-// router.delete('/delete/:id', Article.deleteArticleById);//deleteById
+router.delete('/delete/:id', AudioMessage.deleteAudioMessage);//deleteById
 // Add this route to handle getting an audio message by ID
 router.get('/audio-message/:id',AudioMessage.getAudioMessageById);
 

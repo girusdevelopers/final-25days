@@ -3,130 +3,341 @@ import AudioMesssage from "@/models/SubFolderPanchayithe/AudioMessage.model";
 import MainFolder from "@/models/SubFolderPanchayithe/MainFolder.model";
 import SubFolder from "@/models/SubFolderPanchayithe/SubFolder.model";
 import { sanitizeFileName } from "@/utils/SanitizeFileName";
-import { s3client } from "@/utils/s3service";
+import { deleteS3File, s3client } from "@/utils/s3service";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 
 
+// export const uploadAudioMessage = async (req, res) => {
+//     // Extract relevant data from the request body
+//     const { AudioMesssagetitle, artist, description, MainmostFolderName,SubFolderName} = req.body;
+  
+//     // Extract music and banner files from the request
+//     const Music = req.files.Music[0];
+//     const Banner = req.files.Banner[0];
+
+//     if (!AudioMesssagetitle) {
+//       return res.status(400).json({ error: "AudioMesssagetitle required field" });
+//     }
+
+//     if (!artist) {
+//       return res.status(400).json({ error: "artist required field" });
+//     }
+
+//     if (!description) {
+//       return res.status(400).json({ error: "description required field" });
+//     }
+
+//     if (!MainmostFolderName) {
+//       return res.status(400).json({ error: "MainmostFolderName required field" });
+//     }
+
+//     if (!SubFolderName) {
+//       return res.status(400).json({ error: "SubFolderName required field" });
+//     }
+
+//     if (!Music) {
+//       return res.status(400).json({ error: "Music required file" });
+//     }
+
+//     if (!Banner) {
+//       return res.status(400).json({ error: "Banner required file" });
+//     }
+  
+//     // Process music details
+//     const AudioName = req.files.Music[0].originalname;
+//     const MusicName = sanitizeFileName(AudioName);
+//     const MusicKey = `${uuidv4()}-${MusicName}`;
+  
+//     // Process banner details
+//     const file2Name = req.files.Banner[0].originalname;
+//     const BannerName = sanitizeFileName(file2Name);
+//     const Bannerkey = `${uuidv4()}-${BannerName}`
+  
+//     const existingMain = await MainFolder.findOne({
+//       MainmostFolderName
+//       : { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
+//   });
+
+//   if (!existingMain) {
+//     return res.status(500).json({ message: "Main folder does not exist" });
+// }
+
+//    const existingSub = await SubFolder.findOne({
+//             MainmostFolderId: existingMain._id,
+//             SubFolderName: { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
+//         });
+
+//         if (!existingSub) {
+//           return res.status(500).json({ message: "Subfolder does not exist within the specified main folder" });
+//       }
+  
+//   if(!existingSub || !existingMain){
+//     return res.status(500).json({ message:"Please provide valid folder name"})
+//   }
+//     try {
+//       // Set up parameters for uploading music file to S3
+//       const params1 = {
+//         Bucket: AWS_BUCKET_NAME,
+//         Key: `uploads/${MusicKey}`,
+//         Body: Music.buffer,
+//         ContentType: Music.mimetype,
+//       };
+  
+//       // Set up parameters for uploading banner file to S3
+//       const params2 = {
+//         Bucket: AWS_BUCKET_NAME,
+//         Key: `uploads/${Bannerkey}`,
+//         Body: Banner.buffer,
+//         ContentType: Banner.mimetype,
+//       };
+  
+//       // Create S3 upload commands for music and banner files
+//       const command1 = new PutObjectCommand(params1);
+//       const command2 = new PutObjectCommand(params2);
+  
+//       // Upload music file to S3
+//       const uploaded1 = await s3client.send(command1);
+  
+//       // Upload banner file to S3
+//       const uploaded2 = await s3client.send(command2);
+  
+//       // Format lyrics (replace newline characters with '<br>')
+  
+//       if(existingSub && existingMain){
+//         const audiomesssage = await AudioMesssage.create({
+//             AudioMesssagetitle,
+//             artist,
+//             description,
+//             MainmostFolderName,
+//             SubFolderName,
+//             AudioMesssageKey: MusicKey,
+//             AudioMesssageBannerKey: Bannerkey,
+//             AudioMesssage_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params1.Key}`,
+//             AudioMesssageBanner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params2.Key}`,
+//           });
+
+//           // const ArticleDetails = await MainFolder.create({
+//           //   MainmostFolderName,
+//           //   SubfolderinMainfolder:`${BASE_URL}/v1/subfolder/main/${MainmostFolderName}`,
+//           //   MainmostFolderNamekey: Bannerkey,
+//           //   MainmostFolderName_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
+//           // });
+      
+//           // Respond with success message and the created audio entry
+//           return res.status(201).json({
+//             success: "song added successfully",
+//             audiomesssage,
+//           });
+//       }
+      
+//     } catch (error) {
+//       // Handle errors by responding with the error details
+//       return res.status(500).json(error);
+//     }
+//   };
+
+
+// export const uploadAudioMessage = async (req, res) => {
+//   // Extract relevant data from the request body
+//   const { AudioMesssagetitle, artist, description, MainmostFolderName, SubFolderName } = req.body;
+
+//   // Extract music and banner files from the request
+//   const Music = req.files.Music[0];
+//   const Banner = req.files.Banner[0];
+
+//   if (!AudioMesssagetitle || !artist || !description || !MainmostFolderName || !SubFolderName || !Music || !Banner) {
+//       return res.status(400).json({ error: "Please provide all required fields and files" });
+//   }
+
+//   try {
+//       // Check if the main folder exists
+//       const existingMain = await MainFolder.findOne({
+//           MainmostFolderName: { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
+//       });
+//       console.log(existingMain)
+//       if (!existingMain) {
+//           return res.status(500).json({ message: "Main folder does not exist" });
+//       }
+
+//       // Check if the specified subfolder exists within the main folder
+//       const existingSub = await SubFolder.findOne({
+//           MainmostFolderName: existingMain._id,
+//           SubFolderName: { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
+//       });
+//       console.log(existingSub)
+
+//       if (!existingSub) {
+//           return res.status(500).json({ message: "Subfolder does not exist within the specified main folder" });
+//       }
+
+//       // Process music details
+//       const AudioName = req.files.Music[0].originalname;
+//       const MusicName = sanitizeFileName(AudioName);
+//       const MusicKey = `${uuidv4()}-${MusicName}`;
+
+//       // Process banner details
+//       const file2Name = req.files.Banner[0].originalname;
+//       const BannerName = sanitizeFileName(file2Name);
+//       const Bannerkey = `${uuidv4()}-${BannerName}`;
+
+//       // Set up parameters for uploading music file to S3
+//       const params1 = {
+//           Bucket: AWS_BUCKET_NAME,
+//           Key: `uploads/${MusicKey}`,
+//           Body: Music.buffer,
+//           ContentType: Music.mimetype,
+//       };
+
+//       // Set up parameters for uploading banner file to S3
+//       const params2 = {
+//           Bucket: AWS_BUCKET_NAME,
+//           Key: `uploads/${Bannerkey}`,
+//           Body: Banner.buffer,
+//           ContentType: Banner.mimetype,
+//       };
+
+//       // Create S3 upload commands for music and banner files
+//       const command1 = new PutObjectCommand(params1);
+//       const command2 = new PutObjectCommand(params2);
+
+//       // Upload music file to S3
+//       const uploaded1 = await s3client.send(command1);
+
+//       // Upload banner file to S3
+//       const uploaded2 = await s3client.send(command2);
+
+//       // Create the audio message entry
+//       const audiomesssage = await AudioMesssage.create({
+//           AudioMesssagetitle,
+//           artist,
+//           description,
+//           MainmostFolderName,
+//           SubFolderName,
+//           AudioMesssageKey: MusicKey,
+//           AudioMesssageBannerKey: Bannerkey,
+//           AudioMesssage_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params1.Key}`,
+//           AudioMesssageBanner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params2.Key}`,
+//       });
+
+//       // Respond with success message and the created audio entry
+//       return res.status(201).json({
+//           success: "Song added successfully",
+//           audiomesssage,
+//       });
+//   } catch (error) {
+//       // Handle errors by responding with the error details
+//       return res.status(500).json(error);
+//   }
+// };
+
+
 export const uploadAudioMessage = async (req, res) => {
-    // Extract relevant data from the request body
-    const { AudioMesssagetitle, artist, description, MainmostFolderName,SubFolderName} = req.body;
-  
-    // Extract music and banner files from the request
-    const Music = req.files.Music[0];
-    const Banner = req.files.Banner[0];
+  // Extract relevant data from the request body
+  const { AudioMesssagetitle, artist, description, MainmostFolderName, SubFolderName } = req.body;
 
-    if (!AudioMesssagetitle) {
-      return res.status(400).json({ error: "AudioMesssagetitle required field" });
-    }
+  // Extract music and banner files from the request
+  const Music = req.files.Music[0];
+  const Banner = req.files.Banner[0];
 
-    if (!artist) {
-      return res.status(400).json({ error: "artist required field" });
-    }
-
-    if (!description) {
-      return res.status(400).json({ error: "description required field" });
-    }
-
-    if (!MainmostFolderName) {
-      return res.status(400).json({ error: "MainmostFolderName required field" });
-    }
-
-    if (!SubFolderName) {
-      return res.status(400).json({ error: "SubFolderName required field" });
-    }
-
-    if (!Music) {
-      return res.status(400).json({ error: "Music required file" });
-    }
-
-    if (!Banner) {
-      return res.status(400).json({ error: "Banner required file" });
-    }
-  
-    // Process music details
-    const AudioName = req.files.Music[0].originalname;
-    const MusicName = sanitizeFileName(AudioName);
-    const MusicKey = `${uuidv4()}-${MusicName}`;
-  
-    // Process banner details
-    const file2Name = req.files.Banner[0].originalname;
-    const BannerName = sanitizeFileName(file2Name);
-    const Bannerkey = `${uuidv4()}-${BannerName}`
-  
-    const existingSub = await SubFolder.findOne({
-        SubFolderName
-        : { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
-    });
-
-    const existingMain = await MainFolder.findOne({
-        MainmostFolderName
-        : { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
-    });
-  if(!existingSub || !existingMain){
-    return res.status(500).json({ message:"Please provide valid folder name"})
+  if (!AudioMesssagetitle || !artist || !description || !MainmostFolderName || !SubFolderName || !Music || !Banner) {
+      return res.status(400).json({ error: "Please provide all required fields and files" });
   }
-    try {
+
+  try {
+      // Check if the specified subfolder exists within any main folder
+      // const existingSub = await SubFolder.findOne({
+      //   SubFolderName,
+      // });
+      //   console.log(existingSub)
+      // if (!existingSub) {
+      //     return res.status(500).json({ message: "Subfolder does not exist" });
+      // }
+
+      // // Find the main folder based on the MainmostFolderName in the existingSub
+      // const existingMain = await MainFolder.findOne({
+      //     MainmostFolderName: existingSub.MainmostFolderName,
+      // });
+      // console.log(existingMain)
+      // if (!existingMain) {
+      //     return res.status(500).json({ message: "Main folder does not exist for the specified subfolder" });
+      // }
+      const existingMain = await MainFolder.findOne({
+        MainmostFolderName: { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
+    });
+
+    if (!existingMain) {
+        return res.status(500).json({ message: "Main folder does not exist" });
+    }
+
+    // Check if the specified subfolder exists within the main folder
+    const existingSub = await SubFolder.findOne({
+        MainmostFolder: existingMain._id,
+        SubFolderName: { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
+    });
+
+    if (!existingSub) {
+        return res.status(500).json({ message: "Subfolder does not exist within the specified main folder" });
+    }
+      // Process music details
+      const AudioName = req.files.Music[0].originalname;
+      const MusicName = sanitizeFileName(AudioName);
+      const MusicKey = `${uuidv4()}-${MusicName}`;
+
+      // Process banner details
+      const file2Name = req.files.Banner[0].originalname;
+      const BannerName = sanitizeFileName(file2Name);
+      const Bannerkey = `${uuidv4()}-${BannerName}`;
+
       // Set up parameters for uploading music file to S3
       const params1 = {
-        Bucket: AWS_BUCKET_NAME,
-        Key: `uploads/${MusicKey}`,
-        Body: Music.buffer,
-        ContentType: Music.mimetype,
+          Bucket: AWS_BUCKET_NAME,
+          Key: `uploads/${MusicKey}`,
+          Body: Music.buffer,
+          ContentType: Music.mimetype,
       };
-  
+
       // Set up parameters for uploading banner file to S3
       const params2 = {
-        Bucket: AWS_BUCKET_NAME,
-        Key: `uploads/${Bannerkey}`,
-        Body: Banner.buffer,
-        ContentType: Banner.mimetype,
+          Bucket: AWS_BUCKET_NAME,
+          Key: `uploads/${Bannerkey}`,
+          Body: Banner.buffer,
+          ContentType: Banner.mimetype,
       };
-  
+
       // Create S3 upload commands for music and banner files
       const command1 = new PutObjectCommand(params1);
       const command2 = new PutObjectCommand(params2);
-  
+
       // Upload music file to S3
       const uploaded1 = await s3client.send(command1);
-  
+
       // Upload banner file to S3
       const uploaded2 = await s3client.send(command2);
-  
-      // Format lyrics (replace newline characters with '<br>')
-  
-      if(existingSub && existingMain){
-        const audiomesssage = await AudioMesssage.create({
-            AudioMesssagetitle,
-            artist,
-            description,
-            MainmostFolderName,
-            SubFolderName,
-            AudioMesssageKey: MusicKey,
-            AudioMesssageBannerKey: Bannerkey,
-            AudioMesssage_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params1.Key}`,
-            AudioMesssageBanner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params2.Key}`,
-          });
 
-          // const ArticleDetails = await MainFolder.create({
-          //   MainmostFolderName,
-          //   SubfolderinMainfolder:`${BASE_URL}/v1/subfolder/main/${MainmostFolderName}`,
-          //   MainmostFolderNamekey: Bannerkey,
-          //   MainmostFolderName_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
-          // });
-      
-          // Respond with success message and the created audio entry
-          return res.status(201).json({
-            success: "song added successfully",
-            audiomesssage,
-          });
-      }
-      
-    } catch (error) {
+      // Create the audio message entry
+      const audiomesssage = await AudioMesssage.create({
+          AudioMesssagetitle,
+          artist,
+          description,
+          MainmostFolderName: existingMain.MainmostFolderName,
+          SubFolderName,
+          AudioMesssageKey: MusicKey,
+          AudioMesssageBannerKey: Bannerkey,
+          AudioMesssage_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params1.Key}`,
+          AudioMesssageBanner_location: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params2.Key}`,
+      });
+
+      // Respond with success message and the created audio entry
+      return res.status(201).json({
+          success: "Song added successfully",
+          audiomesssage,
+      });
+  } catch (error) {
       // Handle errors by responding with the error details
       return res.status(500).json(error);
-    }
-  };
+  }
+};
 
 
 
@@ -173,19 +384,19 @@ export const uploadAudioMessage = async (req, res) => {
       const lowercaseTitle = SubFolderName.toLowerCase();
     //   console.log(lowercaseTitle)
   
-    //   const ArticleDetails = await SubFolder.find({ MainmostFolderName: lowercaseTitle });
+      const ArticleDetails = await SubFolder.find({ SubFolderName });
   
-      const ArticleDetailsbyWord = await AudioMesssage.find({
-        SubFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
-      });
-  console.log(ArticleDetailsbyWord)
-    if (ArticleDetailsbyWord.length === 0) {
+      // const ArticleDetailsbyWord = await AudioMesssage.find({
+      //   SubFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
+      // });
+  console.log(ArticleDetails)
+    if (ArticleDetails.length === 0) {
             // Check if there are no partial matches
             return res.status(400).json(`no sub filders by ${SubFolderName} found`);
     }
         res.status(200).json({
           success: "successfully",
-          ArticleDetailsbyWord,
+          ArticleDetails,
         }); 
     } catch (error) {
       // Respond with a 500 error and an error message
@@ -247,3 +458,34 @@ export const uploadAudioMessage = async (req, res) => {
       res.status(500).json({ error: "Error retrieving audio details." });
     }
   };
+
+  export const deleteAudioMessage = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Fetch the details of the song before deletion
+      const deletedSong = await AudioMesssage.findById(id);
+      console.log(deletedSong);
+      if (!deletedSong) {
+        return res.status(404).json({ error: "Song not found" });
+      }
+  
+      // Delete the associated files from S3
+      await deleteS3File(deletedSong.AudioMesssageKey);
+      await deleteS3File(deletedSong.AudioMesssageBannerKey);
+  
+      // Delete the song from the database
+      const deletedAudio = await AudioMesssage.deleteOne({ _id: id });
+  
+      if (deletedAudio.deletedCount === 1) {
+        return res.status(200).json({
+          success: `Song '${deletedSong.AudioMesssagetitle}' and associated files deleted successfully`,
+        });
+      } else {
+        return res.status(500).json({ error: "Error deleting song" });
+      }
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  };
+  

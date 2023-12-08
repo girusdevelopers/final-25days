@@ -2,7 +2,7 @@ import { AWS_BUCKET_NAME, AWS_REGION, BASE_URL } from "@/config";
 import MainFolder from "@/models/SubFolderPanchayithe/MainFolder.model";
 import SubFolder from "@/models/SubFolderPanchayithe/SubFolder.model";
 import { sanitizeFileName } from "@/utils/SanitizeFileName";
-import { s3client } from "@/utils/s3service";
+import { deleteS3File, s3client } from "@/utils/s3service";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 
@@ -92,9 +92,7 @@ export const createSubFolder = async (req, res) => {
     return res.status(400).json({ error: "MainmostFolderName required field" });
   }
 
-  if (!SubFolderBanner) {
-    return res.status(400).json({ error: "SubFolderBanner required file" });
-  }
+ 
 
   const file2Name = SubFolderBanner.originalname;
   const BannerName = sanitizeFileName(file2Name);
@@ -121,9 +119,9 @@ export const createSubFolder = async (req, res) => {
 
     // Check for the existence of a subfolder with the same name within the specified main folder
     const existingSub = await SubFolder.findOne({
+      MainmostFolder: existingMain._id,
       SubFolderName: { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
-      MainmostFolderName,
-    });
+  });
 
     if (existingSub) {
       return res.status(400).json({ message: `${SubFolderName} already exists in ${MainmostFolderName}; please change the name` });
@@ -132,8 +130,9 @@ export const createSubFolder = async (req, res) => {
     const ArticleDetails = await SubFolder.create({
       SubFolderName,
       MainmostFolderName,
+      MainmostFolder: existingMain._id,
       SubFolderkey: Bannerkey,
-      audiomessagessubfolder:`${BASE_URL}/v1/audiomessage/${SubFolderName}`,
+      audiomessagessubfolder:`${BASE_URL}/v1/audiomessage/sub/${SubFolderName}`,
       SubFolder_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
     });
 
@@ -143,6 +142,58 @@ export const createSubFolder = async (req, res) => {
   }
 };
   
+
+
+// Controller to create a subfolder
+// exports.createSubFolder = async (req, res) => {
+//     // Extract relevant data from the request body
+//     const { SubFolderName, MainmostFolderName } = req.body;
+
+//     // Validation: Ensure required fields are provided
+//     if (!SubFolderName || !MainmostFolderName) {
+//         return res.status(400).json({ error: "Please provide SubFolderName and MainmostFolderName" });
+//     }
+
+//     try {
+//         // Check if the main folder exists
+//         const existingMain = await MainFolder.findOne({
+//             MainmostFolderName: { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
+//         });
+
+//         if (!existingMain) {
+//             return res.status(500).json({ message: "Main folder does not exist" });
+//         }
+
+//         // Check if the subfolder already exists within the main folder
+//         const existingSub = await SubFolder.findOne({
+//             MainmostFolder: existingMain._id,
+//             SubFolderName: { $regex: new RegExp(`^${SubFolderName}$`, 'i') },
+//         });
+
+//         if (existingSub) {
+//             return res.status(500).json({ message: "Subfolder already exists within the specified main folder" });
+//         }
+
+//         // Create the subfolder
+//         const subfolder = await SubFolder.create({
+//             SubFolderName,
+//             MainmostFolder: existingMain._id,
+//             MainmostFolderName: MainmostFolderName, // Save the MainmostFolderName in the subfolder
+//             // Add other fields as needed
+//         });
+
+//         // Respond with success message and the created subfolder entry
+//         return res.status(201).json({
+//             success: "Subfolder created successfully",
+//             subfolder,
+//         });
+//     } catch (error) {
+//         // Handle errors by responding with the error details
+//         return res.status(500).json({ error: "Internal Server Error" });
+//     }
+// };
+
+
   export const getMainFolderinsubFolderByName = async (req, res) => {
     // Extract the name parameter from the request
     try {
@@ -154,17 +205,17 @@ export const createSubFolder = async (req, res) => {
   
     //   const ArticleDetails = await SubFolder.find({ MainmostFolderName: lowercaseTitle });
   
-      const ArticleDetailsbyWord = await SubFolder.find({
-        MainmostFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
+      const Mainfolders = await SubFolder.find({
+        MainmostFolderName: lowercaseTitle,
       });
   
-    if (ArticleDetailsbyWord.length === 0) {
+    if (Mainfolders.length === 0) {
             // Check if there are no partial matches
             return res.status(400).json(`no sub filders by ${MainFolderName} found`);
     }
         res.status(200).json({
           success: "successfully",
-          ArticleDetailsbyWord,
+          Mainfolders,
         }); 
     } catch (error) {
       // Respond with a 500 error and an error message
@@ -176,11 +227,11 @@ export const createSubFolder = async (req, res) => {
 
   export const getallsongs = async (req, res) => {
     try {
-      const getallsongs = await SubFolder.find(); // Retrieve all audio details from the database
+      const allsubfolders = await SubFolder.find(); // Retrieve all audio details from the database
   
       return res.status(200).json({
         success: "Fetched all songs",
-        getallsongs,
+        allsubfolders,
       });
     } catch (error) {
       res.status(500).json({ error: "Error retrieving audio details." });
@@ -200,17 +251,17 @@ export const createSubFolder = async (req, res) => {
   
     //   const ArticleDetails = await SubFolder.find({ MainmostFolderName: lowercaseTitle });
   
-      const ArticleDetailsbyWord = await SubFolder.find({
-        SubFolderName: { $regex: new RegExp(lowercaseTitle, "i") },
+      const subfolders = await SubFolder.find({
+        SubFolderName:lowercaseTitle,
       });
-  console.log(ArticleDetailsbyWord)
-    if (ArticleDetailsbyWord.length === 0) {
+  // console.log(ArticleDetailsbyWord)
+    if (subfolders.length === 0) {
             // Check if there are no partial matches
             return res.status(400).json(`no sub filders by ${SubFolderName} found`);
     }
         res.status(200).json({
           success: "successfully",
-          ArticleDetailsbyWord,
+          subfolders,
         }); 
     } catch (error) {
       // Respond with a 500 error and an error message
@@ -245,6 +296,39 @@ export const createSubFolder = async (req, res) => {
     } catch (error) {
       // Handle any errors that occurred during the retrieval process
       console.error(error);
-      res.status(500).json({ error: "Error retrieving SubFolder details" });
+      res.status(500).json(error);
+    }
+  };
+
+
+  export const deleteSubFolder = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Fetch the details of the song before deletion
+      const deletedAlbum = await SubFolder.findById(id);
+      // console.log(deletedAlbum);
+      if (!deletedAlbum) {
+        return res.status(404).json({ error: "sub folder not found" });
+      }
+      // Delete the associated files from S3
+      // await deleteS3File(deletedSong.MusicKey);
+      await deleteS3File(deletedAlbum.SubFolderkey);
+  
+      // Delete the song from the database
+      const deleteAlbum = await SubFolder.deleteOne({ _id: id });
+  // Check if the deletion was successful (deletedCount === 1)
+      if (deleteAlbum.deletedCount === 1) {
+         // If successful, respond with a success message
+        return res.status(200).json({
+          success: `folder '${deletedAlbum.SubFolderName}' and associated files deleted successfully`,
+        });
+      } else {
+        // If deletion was not successful, respond with a 500 error
+        return res.status(500).json({ error: "Error deleting main folder" });
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the deletion process
+      return res.status(500).json(error);
     }
   };

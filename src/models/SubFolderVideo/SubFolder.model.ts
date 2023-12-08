@@ -10,6 +10,11 @@ const Videosubchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  MainmostFolder: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'VideoMainFolder',
+    required: true,
+},
   SubFolderkey: {
     type: String,
     required: true,

@@ -7,15 +7,22 @@ const subchema = new mongoose.Schema({
     required: true,
   },
 
-  MainmostFolderName: {
+
+ MainmostFolderName: {
     type: String,
     required: true,
-  },
+    trim: true,
+ },
 
   audiomessagessubfolder: {
     type: String,
-    required: true,
+    
   },
+  MainmostFolder: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'MainFolder',
+    required: true,
+},
   SubFolderkey: {
     type: String,
     required: true,

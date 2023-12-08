@@ -16,5 +16,5 @@ const VideoSchema = new mongoose.Schema({
 });
 
 
-const  Video = mongoose.model('VideoFolder', VideoSchema); // 'Song' is the model name
-export default  Video;
+const  Videomessage = mongoose.model('Videomessage', VideoSchema); // 'Song' is the model name
+export default  Videomessage;

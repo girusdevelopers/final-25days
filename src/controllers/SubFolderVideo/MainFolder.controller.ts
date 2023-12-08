@@ -9,59 +9,114 @@ import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 
 
-export const createMainFolder = async (req, res) => {
-    const { MainmostFolderName } = req.body;
-    const MainFolderBanner = req.file;
+// export const createMainFolder = async (req, res) => {
+//     const { MainmostFolderName } = req.body;
+//     const MainFolderBanner = req.file;
 
-    if (!MainmostFolderName) {
-      return res.status(400).json({ error: "MainmostFolderName required field" });
-    }
+//     if (!MainmostFolderName) {
+//       return res.status(400).json({ error: "MainmostFolderName required field" });
+//     }
 
-    if (!MainFolderBanner) {
-      return res.status(400).json({ error: "MainFolderBanner required file" });
-    }
+//     if (!MainFolderBanner) {
+//       return res.status(400).json({ error: "MainFolderBanner required file" });
+//     }
   
-    // console.log(AblumBanner)
-    const file2Name = MainFolderBanner.originalname;
+//     // console.log(AblumBanner)
+//     const file2Name = MainFolderBanner.originalname;
     
-    const BannerName = sanitizeFileName(file2Name);
-    // console.log(BannerName)
-    const Bannerkey = `${uuidv4()}-${BannerName}`
-    // console.log(Bannerkey)
-    // Upload the image to S3 bucket
-    try {
-    const params = {
-      Bucket: AWS_BUCKET_NAME,
-      Key: `uploads/${Bannerkey}`,
-      Body: MainFolderBanner.buffer,
-      ContentType: MainFolderBanner.mimetype,
-    };
-  // Execute S3 upload command  
-    const command1 = new PutObjectCommand(params);
-    const uploaded1 = await s3client.send(command1);
+//     const BannerName = sanitizeFileName(file2Name);
+//     // console.log(BannerName)
+//     const Bannerkey = `${uuidv4()}-${BannerName}`
+//     // console.log(Bannerkey)
+//     // Upload the image to S3 bucket
+//     try {
+//     const params = {
+//       Bucket: AWS_BUCKET_NAME,
+//       Key: `uploads/${Bannerkey}`,
+//       Body: MainFolderBanner.buffer,
+//       ContentType: MainFolderBanner.mimetype,
+//     };
+//   // Execute S3 upload command  
+//     const command1 = new PutObjectCommand(params);
+//     const uploaded1 = await s3client.send(command1);
   
-    const existingFolder = await VideoMainFolder.findOne({
-      MainmostFolderName
-        : { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
-    });
+//     const existingFolder = await VideoMainFolder.findOne({
+//       MainmostFolderName
+//         : { $regex: new RegExp(`^${MainmostFolderName}$`, 'i') },
+//     });
   
-      if (existingFolder) {
-        return res.status(400).json({ message:"this folder name already exists please change folder name"});
-      }
-  // Create a new article with the uploaded banner details  
-      const VideoMessageDetails = await VideoMainFolder.create({
-        MainmostFolderName,
-        SubfolderinMainfolder:`${BASE_URL}/v1/subfolder/${MainmostFolderName}`,
-        MainmostFolderNamekey: Bannerkey,
-        MainmostFolderName_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
-      });
-   // Respond with the created article details   
-      res.status(201).json(VideoMessageDetails);
-    } catch (error) {
-   // Handle errors during article creation/upload   
-      res.status(500).json(error);
-    }
+//       if (existingFolder) {
+//         return res.status(400).json({ message:"this folder name already exists please change folder name"});
+//       }
+//   // Create a new article with the uploaded banner details  
+//       const VideoMessageDetails = await VideoMainFolder.create({
+//         MainmostFolderName,
+//         SubfolderinMainfolder:`${BASE_URL}/v1/subfolder/${MainmostFolderName}`,
+//         MainmostFolderNamekey: Bannerkey,
+//         MainmostFolderName_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
+//       });
+//    // Respond with the created article details   
+//       res.status(201).json(VideoMessageDetails);
+//     } catch (error) {
+//    // Handle errors during article creation/upload   
+//       res.status(500).json(error);
+//     }
+//   };
+
+export const createMainFolder = async (req, res) => {
+  const { MainmostFolderName } = req.body;
+  const MainFolderBanner = req.file;
+
+  if (!MainmostFolderName) {
+    return res.status(400).json({ error: "MainmostFolderName required field" });
+  }
+
+  if (!MainFolderBanner) {
+    return res.status(400).json({ error: "MainFolderBanner required file" });
+  }
+
+  // console.log(AblumBanner)
+  const file2Name = MainFolderBanner.originalname;
+  
+  const BannerName = sanitizeFileName(file2Name);
+  // console.log(BannerName)
+  const Bannerkey = `${uuidv4()}-${BannerName}`
+  // console.log(Bannerkey)
+  // Upload the image to S3 bucket
+  try {
+  const params = {
+    Bucket: AWS_BUCKET_NAME,
+    Key: `uploads/${Bannerkey}`,
+    Body: MainFolderBanner.buffer,
+    ContentType: MainFolderBanner.mimetype,
   };
+// Execute S3 upload command  
+  const command1 = new PutObjectCommand(params);
+  const uploaded1 = await s3client.send(command1);
+
+  const existingAlbum = await VideoMainFolder.findOne({
+    MainmostFolderName
+  });
+
+    if (existingAlbum) {
+      return res.status(400).json({ message:"this folder name already exists please change folder name"});
+    }
+// Create a new article with the uploaded banner details  
+    const MainFolderDetails = await VideoMainFolder.create({
+      MainmostFolderName,
+      SubfolderinMainfolder:`${BASE_URL}/v1/subfolder/main/${MainmostFolderName}`,
+      MainmostFolderNamekey: Bannerkey,
+      MainmostFolderName_banner: `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${params.Key}`,
+    });
+ // Respond with the created article details   
+    res.status(201).json(MainFolderDetails);
+  } catch (error) {
+ // Handle errors during article creation/upload   
+    res.status(500).json(error);
+  }
+};
+
+
 
   export const getAllMainFolders = async (req, res) => {
     try {
@@ -81,7 +136,7 @@ export const createMainFolder = async (req, res) => {
       }));
   
       // Respond with the modified main folders
-      res.status(200).json(modifiedMainFolders);
+      res.status(200).json(allMainFolders);
     } catch (error) {
       // Handle errors during retrieval
       res.status(500).json(error);

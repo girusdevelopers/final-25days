@@ -36,5 +36,5 @@ const MainFolderSchema = new mongoose.Schema({
   },
 });
 
-const FirstFolder = mongoose.model("mainfolder", MainFolderSchema);
+const FirstFolder = mongoose.model("mainfoldeopr", MainFolderSchema);
 export default FirstFolder;

@@ -12,9 +12,10 @@ router.get('/:MainFolderName',MainFolder.getMainFolderByName);//Get a specific a
 // router.put('/Update/a:id', Album.UpdateAlbumTitle); // Update an article by ID
 // router.delete('/delete/:id', Album.deleteAlbumById); // Delete an article by ID
 
-// router.delete('/delete/:id', Article.deleteArticleById);//deleteById
+//deleteById
 // Add this route to handle getting a Main Folder by ID
 router.get('/main-folder/:id',MainFolder.getMainFolderById);
+router.delete('/delete/:id', MainFolder.deleteMainFolder);
 
 
 

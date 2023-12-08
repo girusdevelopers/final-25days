@@ -15,18 +15,18 @@
 // export default router;
 
 import express, { RequestHandler } from "express";
-import * as uploadVideo from "@controllers/SubFolderVideo/Video.controller";
+import * as VideoMessage from "@controllers/SubFolderVideo/Video.controller";
 import { upload } from "@/utils/s3service";
  
 
 const router = express.Router();
  
-router.post("/upload",uploadVideo.uploadVideo);  
- router.get("/main/:MainFolderName", uploadVideo.getMainFolderByName);  
-router.get("/sub/:SubFolderName", uploadVideo.getsubFolderByName);  
-router.get("/getAllVideos",uploadVideo.getAllVideos);
-router.get("/getVideoByTitle/:Videotitle", uploadVideo.getVideoByTitle);
-router.delete("/deleteVideoByTitle/:Videotitle", uploadVideo.deleteVideoByTitle);
+router.post("/upload",VideoMessage.uploadVideoMessage);  
+ router.get("/main/:MainFolderName", VideoMessage.getMainFolderByName);  
+router.get("/sub/:SubFolderName", VideoMessage.getsubFolderByName);  
+router.get("/getAllVideos",VideoMessage.getAllVideos);
+router.get("/getVideoByTitle/:Videotitle", VideoMessage.getVideoByTitle);
+router.delete("/deleteVideoByTitle/:Videotitle", VideoMessage.deleteVideoByTitle);
 
 
 export default router;
